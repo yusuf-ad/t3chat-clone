@@ -36,9 +36,9 @@ export default function Home() {
   const { messages, input, handleInputChange, handleSubmit } = useChat();
 
   return (
-    <div className="h-full w-full relative flex flex-col">
+    <div className="h-full w-full relative flex flex-col gap-14">
       {messages.length > 0 ? (
-        <ChatMessageArea className="mb-8">
+        <ChatMessageArea>
           {messages.map((message) => (
             <div key={message.id} className="whitespace-pre-wrap mt-8">
               <ChatMessage message={message} />
@@ -77,9 +77,10 @@ export default function Home() {
       )}
 
       <div className="w-full sticky mt-auto bottom-6">
+        <div className="absolute inset-0 bg-white/80 backdrop-blur-sm rounded-2xl" />
         <ChatInput
           variant="default"
-          className="border-sidebar-border border-2 shadow-xl w-full focus-within:ring-sidebar-border text-sidebar-logo font-semibold"
+          className="relative border-sidebar-border border-2 shadow-xl w-full focus-within:ring-sidebar-border text-sidebar-logo font-semibold bg-transparent"
           value={input}
           onChange={handleInputChange}
           onSubmit={handleSubmit}
