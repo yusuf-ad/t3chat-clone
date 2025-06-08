@@ -9,7 +9,7 @@ export function CustomTrigger() {
 
   return (
     <div
-      className={`bg-sidebar p-1 absolute z-10 left-3 top-2 rounded-lg flex items-center gap-1  ${
+      className={`bg-sidebar p-1 fixed z-10 left-3 top-2 rounded-lg flex items-center gap-1  ${
         open ? "w-10" : "w-auto"
       }`}
     >
