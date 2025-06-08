@@ -1,6 +1,7 @@
 "use client";
 
 import ChatMessage from "@/components/chat-message";
+import { ModelSelector } from "@/components/model-selector";
 import {
   ChatInput,
   ChatInputSubmit,
@@ -10,7 +11,6 @@ import { ChatMessageArea } from "@/components/ui/chat-message-area";
 
 import { useChat } from "@ai-sdk/react";
 
-// Start of Selection
 export default function Home() {
   const { messages, input, handleInputChange, handleSubmit } = useChat();
 
@@ -33,7 +33,8 @@ export default function Home() {
           onSubmit={handleSubmit}
         >
           <ChatInputTextArea placeholder="Type a message..." />
-          <ChatInputSubmit />
+          <ModelSelector className="absolute bottom-2 left-4" />
+          <ChatInputSubmit className="bg-sidebar-button h-10 w-10 rounded-lg" />
         </ChatInput>
       </div>
     </div>
