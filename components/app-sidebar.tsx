@@ -3,7 +3,6 @@ import {
   SidebarContent,
   SidebarFooter,
   SidebarHeader,
-  SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { Button } from "./ui/button";
 import { Plus } from "lucide-react";
@@ -24,7 +23,7 @@ export function AppSidebar() {
 
         <Button className="py-5 bg-sidebar-button hover:bg-sidebar-button-hover hover:cursor-pointer my-4 shadow-xl">
           <Plus />
-          <span className="font-bold">New Chat</span>
+          <span className="font-bold ">New Chat</span>
         </Button>
       </SidebarHeader>
 
