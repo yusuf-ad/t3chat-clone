@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "@/styles/globals.css";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
+import { CustomTrigger } from "@/components/custom-trigger";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -29,8 +30,10 @@ export default function RootLayout({
       <body className={`bg-background antialiased`}>
         <SidebarProvider>
           <AppSidebar />
-          <main>
-            <SidebarTrigger />
+
+          <main className="h-screen min-h-screen w-full">
+            {/* <SidebarTrigger className="absolute z-10 left-3 top-4 text-sidebar-logo hover:bg-sidebar-border-light cursor-pointer" /> */}
+            <CustomTrigger />
             {children}
           </main>
         </SidebarProvider>

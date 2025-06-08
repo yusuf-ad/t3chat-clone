@@ -15,8 +15,6 @@ export function AppSidebar() {
     <Sidebar>
       <SidebarHeader className="px-3 py-4">
         <div className="flex items-center justify-center relative">
-          <SidebarTrigger className="absolute left-0 text-sidebar-logo hover:bg-sidebar-border-light cursor-pointer" />
-
           <Link href={"/"} className="text-center">
             <h1 className="text-sidebar-logo font-extrabold text-2xl">
               T3.chat
