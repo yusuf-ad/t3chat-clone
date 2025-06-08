@@ -36,11 +36,11 @@ export default function Home() {
   const { messages, input, handleInputChange, handleSubmit } = useChat();
 
   return (
-    <div className="h-full w-full relative flex flex-col gap-14">
+    <div className="h-full w-full flex flex-col gap-14">
       {messages.length > 0 ? (
-        <ChatMessageArea>
+        <ChatMessageArea className="mt-8">
           {messages.map((message) => (
-            <div key={message.id} className="whitespace-pre-wrap mt-8">
+            <div key={message.id} className="whitespace-pre-wrap">
               <ChatMessage message={message} />
             </div>
           ))}
