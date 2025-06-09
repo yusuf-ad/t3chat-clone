@@ -12,30 +12,27 @@ export function AppSidebar() {
   return (
     <Sidebar className="duration-100">
       <SidebarHeader className="px-4 py-4">
-        <div className="flex items-center justify-center relative">
+        <div className="relative flex items-center justify-center">
           <Link href={"/"} className="text-center">
-            <h1 className="text-sidebar-logo font-extrabold text-xl">
+            <h1 className="text-sidebar-logo text-xl font-extrabold">
               T3.chat
             </h1>
           </Link>
         </div>
 
-        <Button className="py-5 bg-sidebar-button hover:bg-sidebar-button-hover hover:cursor-pointer my-4 shadow-xl">
-          <span className="font-bold ">New Chat</span>
+        <Button className="bg-sidebar-button hover:bg-sidebar-button-hover my-4 py-5 shadow-xl hover:cursor-pointer dark:text-white">
+          <span className="font-bold">New Chat</span>
         </Button>
       </SidebarHeader>
 
       <SidebarContent className="px-4">
-        <h3 className="uppercase tracking-widest text-sm text-sidebar-heading font-semibold">
+        <h3 className="text-sidebar-heading text-xs font-semibold tracking-widest uppercase">
           Last 30 Days
         </h3>
 
         <ul className="my-2">
           <li className="px-2">
-            <Link
-              className="truncate block text-sidebar-link font-semibold"
-              href={"/"}
-            >
+            <Link className="text-sidebar-link block truncate" href={"/"}>
               Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet consectetur
               adipisicing elit. Officia, nobis.
             </Link>
@@ -44,16 +41,16 @@ export function AppSidebar() {
       </SidebarContent>
 
       <SidebarFooter className="px-4">
-        <div className="flex items-center gap-4 border-t py-4 border-sidebar-border-light">
+        <div className="border-sidebar-border-light flex items-center gap-4 border-t py-4">
           <Avatar className="h-10 w-10">
             <AvatarImage src={"/avatar.png"} />
           </Avatar>
 
-          <div className="flex flex-col  justify-center">
-            <h4 className=" text-sm text-sidebar-logo font-semibold">
+          <div className="flex flex-col justify-center">
+            <h4 className="text-sidebar-logo text-sm font-semibold">
               Yusuf Ad
             </h4>
-            <span className="text-xs text-sidebar-text-muted">Pro</span>
+            <span className="text-sidebar-text-muted text-xs">Pro</span>
           </div>
         </div>
       </SidebarFooter>

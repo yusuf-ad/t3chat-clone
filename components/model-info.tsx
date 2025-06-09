@@ -9,11 +9,11 @@ export function ModelInfo({ modelInfo }: { modelInfo: string }) {
   return (
     <Tooltip>
       <TooltipTrigger asChild>
-        <button className="p-1 ">
+        <button className="p-1">
           <Info className="h-3 w-3" />
         </button>
       </TooltipTrigger>
-      <TooltipContent className="bg-sidebar-border-light text-black border-2 border-sidebar-border">
+      <TooltipContent className="bg-sidebar-border-light border-sidebar-border border-2 text-black dark:text-white">
         <p>{modelInfo}</p>
       </TooltipContent>
     </Tooltip>

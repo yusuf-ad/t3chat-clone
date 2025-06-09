@@ -44,11 +44,11 @@ export default function Home() {
   return (
     <ChatMessageArea
       scrollButtonAlignment="center"
-      className=" max-h-screen h-screen"
+      className="h-screen max-h-screen"
     >
       <div
         ref={containerRef}
-        className="max-w-3xl mx-auto w-full relative pt-8 flex flex-col h-full"
+        className="relative mx-auto flex h-full w-full max-w-3xl flex-col pt-8"
       >
         {messages.length > 0 ? (
           <div className="pb-16">
@@ -59,47 +59,49 @@ export default function Home() {
             ))}
           </div>
         ) : (
-          <div className="flex flex-col items-center justify-center h-full">
-            <h2 className="text-3xl font-bold text-interactive-secondary-text tracking-wide">
+          <div className="flex h-full flex-col items-center justify-center px-10">
+            <h2 className="text-interactive-secondary-text text-3xl font-bold tracking-wide">
               How can I help you, Yusuf?
             </h2>
 
-            <div className="flex w-full gap-4 my-8">
+            <div className="my-8 flex w-full gap-4">
               {actions.map((action) => (
                 <Button
-                  className="flex-1 py-6 bg-interactive-secondary text-interactive-secondary-text hover:bg-interactive-secondary-hover cursor-pointer hover:text-interactive-secondary-text font-semibold"
+                  className="bg-interactive-secondary text-interactive-secondary-text hover:bg-interactive-secondary-hover hover:text-interactive-secondary-text flex-1 cursor-pointer border-0 py-6 font-semibold"
                   key={action.name}
                 >
-                  <action.icon className="h-5 w-5 mr-2" />
+                  <action.icon className="mr-2 h-5 w-5" />
                   {action.name}
                 </Button>
               ))}
             </div>
 
-            <div className="flex flex-col w-full gap-4 mt-4">
+            <div className="mt-4 flex w-full flex-col gap-2">
               {questions.map((question) => (
-                <Button
-                  className="flex-1 py-4 flex items-center justify-start text-interactive-ghost-text bg-purple-50 hover:bg-interactive-secondary hover:text-interactive-secondary-text cursor-pointer font-semibold tracking-wide"
-                  key={question}
-                >
-                  {question}
-                </Button>
+                <div className="border-sidebar-border-light flex-1 pb-1 not-last:border-b">
+                  <Button
+                    className="text-interactive-ghost-text hover:bg-interactive-secondary-hover hover:text-interactive-secondary-text flex w-full cursor-pointer items-center justify-start bg-transparent py-5 font-semibold tracking-wide shadow-none"
+                    key={question}
+                  >
+                    {question}
+                  </Button>
+                </div>
               ))}
             </div>
           </div>
         )}
 
         <div className="sticky bottom-6 mt-auto w-full">
-          <div className="absolute inset-0 bg-surface-overlay rounded-2xl" />
+          <div className="bg-surface-overlay absolute inset-0 rounded-2xl" />
           <ChatInput
             variant="default"
-            className="relative border-sidebar-border border-2 shadow-xl w-full focus-within:ring-sidebar-border text-sidebar-logo font-semibold bg-transparent"
+            className="border-sidebar-border focus-within:ring-sidebar-border text-sidebar-logo relative w-full border-2 bg-transparent font-semibold shadow-xl"
             value={input}
             onChange={handleInputChange}
             onSubmit={handleSubmit}
           >
             <ChatInputTextArea
-              className="text-chat-text placeholder:text-text-placeholder"
+              className="text-chat-text placeholder:text-text-placeholder dark:bg-transparent"
               placeholder="Type your message here..."
             />
             <ModelSelector className="absolute bottom-2 left-4" />
@@ -108,7 +110,7 @@ export default function Home() {
               <ScrollButton
                 onClick={scrollToBottom}
                 alignment={"center"}
-                className="absolute -top-14 rounded-full shadow-lg hover:bg-secondary"
+                className="hover:bg-secondary absolute -top-14 rounded-full shadow-lg"
               />
             )}
           </ChatInput>

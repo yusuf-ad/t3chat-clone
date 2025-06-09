@@ -22,7 +22,7 @@ export default function ChatMessage({ message }: { message: Message }) {
     <ChatBubble variant="received">
       <ChatBubbleMessage
         variant="sent"
-        className="bg-transparent text-chat-text"
+        className="text-chat-text bg-transparent"
       >
         <MarkdownContent content={message.content} id={message.id} />
       </ChatBubbleMessage>

@@ -4,6 +4,8 @@ import "@/styles/globals.css";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
 import { CustomTrigger } from "@/components/custom-trigger";
+import { ThemeProvider } from "@/components/theme-provider";
+import { SettingsBar } from "@/components/settings-bar";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -26,18 +28,30 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
+    <html
+      lang="en"
+      className={`${geistSans.variable} ${geistMono.variable}`}
+      suppressHydrationWarning
+    >
       <body
         className={`bg-background antialiased relative  selection:bg-sidebar-logo selection:text-white`}
       >
-        <SidebarProvider defaultOpen={false}>
-          <AppSidebar />
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="light"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <SidebarProvider defaultOpen={false}>
+            <AppSidebar />
 
-          <main className="h-screen min-h-screen w-full overflow-y-hidden">
-            <CustomTrigger />
-            {children}
-          </main>
-        </SidebarProvider>
+            <main className="h-screen min-h-screen w-full overflow-y-hidden">
+              <CustomTrigger />
+              <SettingsBar />
+              {children}
+            </main>
+          </SidebarProvider>
+        </ThemeProvider>
       </body>
     </html>
   );
