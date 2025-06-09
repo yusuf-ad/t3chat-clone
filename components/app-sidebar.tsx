@@ -10,7 +10,7 @@ import { Avatar, AvatarImage } from "./ui/avatar";
 
 export function AppSidebar() {
   return (
-    <Sidebar>
+    <Sidebar className="duration-100">
       <SidebarHeader className="px-4 py-4">
         <div className="flex items-center justify-center relative">
           <Link href={"/"} className="text-center">

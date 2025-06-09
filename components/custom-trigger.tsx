@@ -22,7 +22,7 @@ export function CustomTrigger() {
       </Button>
 
       <Button
-        className={`h-8 w-8 text-sidebar-logo hover:bg-sidebar-border-light bg-sidebar cursor-pointer shadow-none transition-all duration-100 ease-in-out ${
+        className={`h-8 w-8 text-sidebar-logo hover:bg-sidebar-border-light bg-sidebar cursor-pointer shadow-none transition-all duration-200 ease-in-out ${
           open ? "-translate-x-20 opacity-0" : "translate-x-0 opacity-100"
         }`}
       >
@@ -31,7 +31,7 @@ export function CustomTrigger() {
       </Button>
 
       <Button
-        className={`h-8 w-8 text-sidebar-logo hover:bg-sidebar-border-light bg-sidebar cursor-pointer shadow-none transition-all duration-100 ease-in-out   ${
+        className={`h-8 w-8 text-sidebar-logo hover:bg-sidebar-border-light bg-sidebar cursor-pointer shadow-none transition-all duration-200 ease-in-out   ${
           open ? "-translate-x-20 opacity-0" : "translate-x-0 opacity-100"
         }`}
       >
