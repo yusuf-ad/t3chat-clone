@@ -224,7 +224,7 @@
   --chat-user-bg: #8b5cf6;
   --chat-assistant-bg: transparent; /* transparent */
   --chat-text: #f5f1ff /* #2f025a */ --chat-scroll-hover: #f9daff; /* #f9daff */
-  --chat-scroll-text: rgba(107, 33, 168, 0.74); /* #6b21a8bc */
+  --chat-scroll-text: var(--purple-200);
 
   /* Interactive colors */
   --interactive-primary: var(--purple-500); /* #a855f7 */

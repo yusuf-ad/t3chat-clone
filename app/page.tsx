@@ -48,7 +48,7 @@ export default function Home() {
     >
       <div
         ref={containerRef}
-        className="relative mx-auto flex h-full w-full max-w-3xl flex-col pt-8"
+        className="relative mx-auto flex h-full w-full max-w-3xl flex-col pt-14"
       >
         {messages.length > 0 ? (
           <div className="pb-16">
@@ -92,7 +92,7 @@ export default function Home() {
         )}
 
         <div className="sticky bottom-6 mt-auto w-full">
-          <div className="bg-surface-overlay absolute inset-0 rounded-2xl" />
+          <div className="bg-surface-overlay absolute inset-0 rounded-2xl backdrop-blur-sm" />
           <ChatInput
             variant="default"
             className="border-sidebar-border focus-within:ring-sidebar-border text-sidebar-logo relative w-full border-2 bg-transparent font-semibold shadow-xl"

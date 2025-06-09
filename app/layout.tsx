@@ -34,7 +34,7 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body
-        className={`bg-background antialiased relative  selection:bg-sidebar-logo selection:text-white`}
+        className={`bg-background selection:bg-sidebar-logo relative antialiased selection:text-white dark:selection:text-black`}
       >
         <ThemeProvider
           attribute="class"

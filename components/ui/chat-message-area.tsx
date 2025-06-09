@@ -28,9 +28,9 @@ export function ScrollButton({
     <Button
       variant="secondary"
       className={cn(
-        "absolute bottom-4 rounded-full hover:bg-chat-scroll-hover text-chat-scroll-text cursor-pointer bg-sidebar text-xs font-semibold h-8 border-2 border-sidebar-border shadow-none",
+        "hover:bg-chat-scroll-hover text-chat-scroll-text bg-sidebar border-sidebar-border absolute bottom-4 h-8 cursor-pointer rounded-full border-2 text-xs font-semibold shadow-none",
         alignmentClasses[alignment],
-        className
+        className,
       )}
       onClick={onClick}
     >
