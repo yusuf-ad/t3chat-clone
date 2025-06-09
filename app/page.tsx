@@ -8,7 +8,11 @@ import {
   ChatInputSubmit,
   ChatInputTextArea,
 } from "@/components/ui/chat-input";
-import { ChatMessageArea } from "@/components/ui/chat-message-area";
+import {
+  ChatMessageArea,
+  ScrollButton,
+} from "@/components/ui/chat-message-area";
+import { useScrollToBottom } from "@/hooks/use-scroll-to-bottom";
 
 import { useChat } from "@ai-sdk/react";
 import {
@@ -34,13 +38,18 @@ const questions = [
 
 export default function Home() {
   const { messages, input, handleInputChange, handleSubmit } = useChat();
+  const [containerRef, showScrollButton, scrollToBottom] =
+    useScrollToBottom<HTMLDivElement>();
 
   return (
     <ChatMessageArea
       scrollButtonAlignment="center"
       className=" max-h-screen h-screen"
     >
-      <div className="max-w-3xl mx-auto w-full relative pt-8 flex flex-col h-full">
+      <div
+        ref={containerRef}
+        className="max-w-3xl mx-auto w-full relative pt-8 flex flex-col h-full"
+      >
         {messages.length > 0 ? (
           <div className="pb-16">
             {messages.map((message) => (
@@ -95,6 +104,13 @@ export default function Home() {
             />
             <ModelSelector className="absolute bottom-2 left-4" />
             <ChatInputSubmit className="bg-sidebar-button h-10 w-10 rounded-lg" />
+            {showScrollButton && (
+              <ScrollButton
+                onClick={scrollToBottom}
+                alignment={"center"}
+                className="absolute -top-14 rounded-full shadow-lg hover:bg-secondary"
+              />
+            )}
           </ChatInput>
         </div>
       </div>

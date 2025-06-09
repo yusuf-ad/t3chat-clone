@@ -27,14 +27,14 @@ export function ScrollButton({
   return (
     <Button
       variant="secondary"
-      size="icon"
       className={cn(
-        "absolute bottom-4 rounded-full shadow-lg hover:bg-secondary",
+        "absolute bottom-4 rounded-full hover:bg-[#f9daff]! text-[#6b21a8bc] cursor-pointer bg-sidebar text-xs font-semibold border-2 border-sidebar-border shadow-none",
         alignmentClasses[alignment],
         className
       )}
       onClick={onClick}
     >
+      Scroll to bottom
       <ChevronDown className="h-4 w-4" />
     </Button>
   );
@@ -46,26 +46,10 @@ interface ChatMessageAreaProps {
   scrollButtonAlignment?: ScrollButtonAlignment;
 }
 
-export function ChatMessageArea({
-  children,
-  className,
-  scrollButtonAlignment = "right",
-}: ChatMessageAreaProps) {
-  const [containerRef, showScrollButton, scrollToBottom] =
-    useScrollToBottom<HTMLDivElement>();
-
+export function ChatMessageArea({ children, className }: ChatMessageAreaProps) {
   return (
     <ScrollArea className="relative flex-1">
-      <div ref={containerRef}>
-        <div className={cn(className, "min-h-0")}>{children}</div>
-      </div>
-      {showScrollButton && (
-        <ScrollButton
-          onClick={scrollToBottom}
-          alignment={scrollButtonAlignment}
-          className="absolute bottom-36 rounded-full shadow-lg hover:bg-secondary"
-        />
-      )}
+      <div className={cn(className, "min-h-0")}>{children}</div>
     </ScrollArea>
   );
 }
