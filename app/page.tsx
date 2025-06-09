@@ -53,7 +53,7 @@ export default function Home() {
         {messages.length > 0 ? (
           <div className="pb-16">
             {messages.map((message) => (
-              <div key={message.id} className="whitespace-pre-wrap ">
+              <div key={message.id}>
                 <ChatMessage message={message} />
               </div>
             ))}
