@@ -91,11 +91,11 @@ export default function Home() {
           </div>
         )}
 
-        <div className="sticky bottom-6 mt-auto w-full">
-          <div className="bg-surface-overlay absolute inset-0 rounded-2xl backdrop-blur-sm" />
+        <div className="sticky bottom-0 mt-auto w-full">
+          <div className="absolute inset-0 rounded-2xl bg-white/30 backdrop-blur-md dark:bg-black/30" />
           <ChatInput
             variant="default"
-            className="border-sidebar-border focus-within:ring-sidebar-border text-sidebar-logo relative w-full border-2 bg-transparent font-semibold shadow-xl"
+            className="border-sidebar-border focus-within:ring-sidebar-border text-sidebar-logo relative min-h-28 w-full rounded-b-none border-2 bg-transparent font-semibold shadow-xl"
             value={input}
             onChange={handleInputChange}
             onSubmit={handleSubmit}
