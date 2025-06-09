@@ -33,7 +33,7 @@ export default function RootLayout({
         <SidebarProvider defaultOpen={false}>
           <AppSidebar />
 
-          <main className="h-screen min-h-screen w-full max-w-3xl mx-auto">
+          <main className="h-screen min-h-screen w-full overflow-y-hidden">
             <CustomTrigger />
             {children}
           </main>
