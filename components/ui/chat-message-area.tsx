@@ -28,7 +28,7 @@ export function ScrollButton({
     <Button
       variant="secondary"
       className={cn(
-        "absolute bottom-4 rounded-full hover:bg-[#f9daff]! text-[#6b21a8bc] cursor-pointer bg-sidebar text-xs font-semibold h-8 border-2 border-sidebar-border shadow-none",
+        "absolute bottom-4 rounded-full hover:bg-chat-scroll-hover text-chat-scroll-text cursor-pointer bg-sidebar text-xs font-semibold h-8 border-2 border-sidebar-border shadow-none",
         alignmentClasses[alignment],
         className
       )}

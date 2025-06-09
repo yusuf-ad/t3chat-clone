@@ -60,14 +60,14 @@ export default function Home() {
           </div>
         ) : (
           <div className="flex flex-col items-center justify-center h-full">
-            <h2 className="text-3xl font-bold text-[#6b21a8] tracking-wide">
+            <h2 className="text-3xl font-bold text-interactive-secondary-text tracking-wide">
               How can I help you, Yusuf?
             </h2>
 
             <div className="flex w-full gap-4 my-8">
               {actions.map((action) => (
                 <Button
-                  className="flex-1 py-6 bg-[#e9d5ff] text-[#6b21a8] hover:bg-[#d8b4fe] cursor-pointer hover:text-[#6b21a8] font-semibold"
+                  className="flex-1 py-6 bg-interactive-secondary text-interactive-secondary-text hover:bg-interactive-secondary-hover cursor-pointer hover:text-interactive-secondary-text font-semibold"
                   key={action.name}
                 >
                   <action.icon className="h-5 w-5 mr-2" />
@@ -79,7 +79,7 @@ export default function Home() {
             <div className="flex flex-col w-full gap-4 mt-4">
               {questions.map((question) => (
                 <Button
-                  className="flex-1 py-4 flex items-center justify-start text-[#a669de] bg-[#f5f3ff] hover:bg-[#e9d5ff] hover:text-[#6b21a8] cursor-pointer font-semibold tracking-wide"
+                  className="flex-1 py-4 flex items-center justify-start text-interactive-ghost-text bg-purple-50 hover:bg-interactive-secondary hover:text-interactive-secondary-text cursor-pointer font-semibold tracking-wide"
                   key={question}
                 >
                   {question}
@@ -90,7 +90,7 @@ export default function Home() {
         )}
 
         <div className="sticky bottom-6 mt-auto w-full">
-          <div className="absolute inset-0 bg-white/80 backdrop-blur-sm rounded-2xl" />
+          <div className="absolute inset-0 bg-surface-overlay rounded-2xl" />
           <ChatInput
             variant="default"
             className="relative border-sidebar-border border-2 shadow-xl w-full focus-within:ring-sidebar-border text-sidebar-logo font-semibold bg-transparent"
@@ -99,7 +99,7 @@ export default function Home() {
             onSubmit={handleSubmit}
           >
             <ChatInputTextArea
-              className="text-[#2f025a] placeholder:text-[#6b21a860]"
+              className="text-chat-text placeholder:text-text-placeholder"
               placeholder="Type your message here..."
             />
             <ModelSelector className="absolute bottom-2 left-4" />

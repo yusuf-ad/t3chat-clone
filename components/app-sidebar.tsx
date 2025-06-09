@@ -5,7 +5,6 @@ import {
   SidebarHeader,
 } from "@/components/ui/sidebar";
 import { Button } from "./ui/button";
-import { Plus } from "lucide-react";
 import Link from "next/link";
 import { Avatar, AvatarImage } from "./ui/avatar";
 
