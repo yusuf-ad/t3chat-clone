@@ -8,7 +8,10 @@ export default function ChatMessage({ message }: { message: Message }) {
   if (isUser) {
     return (
       <ChatBubble variant="sent">
-        <ChatBubbleMessage className="bg-[#d2c4fa] text-black" variant="sent">
+        <ChatBubbleMessage
+          className="bg-[#d2c4fa] text-[#2f025a]"
+          variant="sent"
+        >
           <MarkdownContent content={message.content} id={message.id} />
         </ChatBubbleMessage>
       </ChatBubble>
@@ -17,7 +20,10 @@ export default function ChatMessage({ message }: { message: Message }) {
 
   return (
     <ChatBubble variant="received">
-      <ChatBubbleMessage variant="sent" className="bg-transparent text-black">
+      <ChatBubbleMessage
+        variant="sent"
+        className="bg-transparent text-[#2f025a]"
+      >
         <MarkdownContent content={message.content} id={message.id} />
       </ChatBubbleMessage>
     </ChatBubble>
