@@ -33,7 +33,7 @@
 #### 4. UI/UX Requirements
 
 - [ ] Responsive design (mobile, tablet, desktop)
-- [ ] Dark/Light mode
+- [x] Dark/Light mode
 - [ ] Loading states and animations
 - [ ] Error handling and user feedback
 - [ ] Keyboard shortcuts

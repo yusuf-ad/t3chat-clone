@@ -9,7 +9,7 @@ export default function ChatMessage({ message }: { message: Message }) {
     return (
       <ChatBubble variant="sent">
         <ChatBubbleMessage
-          className="bg-chat-user-background text-chat-text"
+          className="bg-chat-user-background text-chat-text px-4 py-3"
           variant="sent"
         >
           <MarkdownContent content={message.content} id={message.id} />

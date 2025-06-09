@@ -48,10 +48,10 @@ export default function Home() {
     >
       <div
         ref={containerRef}
-        className="relative mx-auto flex h-full w-full max-w-3xl flex-col pt-14"
+        className="relative mx-auto flex h-full w-full max-w-3xl flex-col px-2 pt-14"
       >
         {messages.length > 0 ? (
-          <div className="pb-16">
+          <div className="px-4 pb-8">
             {messages.map((message) => (
               <div key={message.id}>
                 <ChatMessage message={message} />
@@ -78,11 +78,11 @@ export default function Home() {
 
             <div className="mt-4 flex w-full flex-col gap-2">
               {questions.map((question) => (
-                <div className="border-sidebar-border-light flex-1 pb-1 not-last:border-b">
-                  <Button
-                    className="text-interactive-ghost-text hover:bg-interactive-secondary-hover hover:text-interactive-secondary-text flex w-full cursor-pointer items-center justify-start bg-transparent py-5 font-semibold tracking-wide shadow-none"
-                    key={question}
-                  >
+                <div
+                  key={question}
+                  className="border-sidebar-border-light flex-1 pb-1 not-last:border-b"
+                >
+                  <Button className="text-interactive-ghost-text hover:bg-interactive-secondary-hover hover:text-interactive-secondary-text flex w-full cursor-pointer items-center justify-start bg-transparent py-5 font-semibold tracking-wide shadow-none">
                     {question}
                   </Button>
                 </div>
@@ -110,7 +110,7 @@ export default function Home() {
               <ScrollButton
                 onClick={scrollToBottom}
                 alignment={"center"}
-                className="hover:bg-secondary absolute -top-14 rounded-full shadow-lg"
+                className="hover:bg-secondary absolute -top-12 rounded-full shadow-lg"
               />
             )}
           </ChatInput>

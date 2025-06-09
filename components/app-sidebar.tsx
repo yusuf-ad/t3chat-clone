@@ -7,20 +7,25 @@ import {
 import { Button } from "./ui/button";
 import Link from "next/link";
 import { Avatar, AvatarImage } from "./ui/avatar";
+import ModeToggle from "./mode-toggle";
 
 export function AppSidebar() {
   return (
     <Sidebar className="duration-100">
       <SidebarHeader className="px-4 py-4">
-        <div className="relative flex items-center justify-center">
-          <Link href={"/"} className="text-center">
-            <h1 className="text-sidebar-logo text-xl font-extrabold">
-              T3.chat
-            </h1>
-          </Link>
+        <div className="relative flex items-center justify-between">
+          <div className="flex flex-1 justify-center">
+            <Link href={"/"}>
+              <h1 className="text-sidebar-logo text-xl font-extrabold">
+                T3.chat
+              </h1>
+            </Link>
+          </div>
+
+          <ModeToggle className="block md:hidden" />
         </div>
 
-        <Button className="bg-sidebar-button hover:bg-sidebar-button-hover my-4 py-5 shadow-xl hover:cursor-pointer dark:text-white">
+        <Button className="bg-sidebar-button hover:bg-sidebar-button-hover my-2 py-4 shadow-xl hover:cursor-pointer dark:text-white">
           <span className="font-bold">New Chat</span>
         </Button>
       </SidebarHeader>

@@ -9,12 +9,12 @@ export function CustomTrigger() {
 
   return (
     <div
-      className={`bg-sidebar p-1 fixed z-10 left-3 top-2 rounded-lg flex items-center gap-1  ${
+      className={`bg-sidebar fixed top-2 left-2 z-10 flex items-center gap-1 rounded-lg p-1 ${
         open ? "w-8" : "w-auto"
       }`}
     >
       <Button
-        className="h-8 w-8 z-20 text-sidebar-logo hover:bg-sidebar-border-light bg-sidebar cursor-pointer shadow-none"
+        className="text-sidebar-logo hover:bg-sidebar-border-light bg-sidebar z-20 h-8 w-8 cursor-pointer shadow-none"
         onClick={toggleSidebar}
       >
         <PanelLeftIcon />
@@ -22,7 +22,7 @@ export function CustomTrigger() {
       </Button>
 
       <Button
-        className={`h-8 w-8 text-sidebar-logo hover:bg-sidebar-border-light bg-sidebar cursor-pointer shadow-none transition-all duration-200 ease-in-out ${
+        className={`text-sidebar-logo hover:bg-sidebar-border-light bg-sidebar h-8 w-8 cursor-pointer shadow-none transition-all duration-200 ease-in-out ${
           open ? "-translate-x-20 opacity-0" : "translate-x-0 opacity-100"
         }`}
       >
@@ -31,7 +31,7 @@ export function CustomTrigger() {
       </Button>
 
       <Button
-        className={`h-8 w-8 text-sidebar-logo hover:bg-sidebar-border-light bg-sidebar cursor-pointer shadow-none transition-all duration-200 ease-in-out   ${
+        className={`text-sidebar-logo hover:bg-sidebar-border-light bg-sidebar h-8 w-8 cursor-pointer shadow-none transition-all duration-200 ease-in-out ${
           open ? "-translate-x-20 opacity-0" : "translate-x-0 opacity-100"
         }`}
       >
