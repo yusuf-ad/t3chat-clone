@@ -18,7 +18,14 @@ function getChatFile(id: string): string {
 }
 
 export async function loadChat(id: string): Promise<Message[]> {
-  return JSON.parse(await readFile(getChatFile(id), "utf8"));
+  try {
+    const content = await readFile(getChatFile(id), "utf8");
+    if (!content.trim()) return [];
+    return JSON.parse(content);
+  } catch (error) {
+    console.error("Error loading chat", error);
+    return [];
+  }
 }
 
 export async function saveChat({
