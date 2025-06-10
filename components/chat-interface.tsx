@@ -15,11 +15,18 @@ import {
 import { MessageLoading } from "@/components/ui/message-loading";
 import { useScrollToBottom } from "@/hooks/use-scroll-to-bottom";
 
-import { useChat } from "@ai-sdk/react";
-import { useRouter } from "next/navigation";
+import { Message, useChat } from "@ai-sdk/react";
+import { usePathname, useRouter } from "next/navigation";
 
-export default function ChatInterface({ id }: { id: string }) {
+export default function ChatInterface({
+  id,
+  initialMessages,
+}: {
+  id: string;
+  initialMessages?: Message[];
+}) {
   const router = useRouter();
+  const pathname = usePathname();
   const {
     messages,
     input,
@@ -29,8 +36,19 @@ export default function ChatInterface({ id }: { id: string }) {
     status,
     setMessages,
   } = useChat({
+    id,
+    initialMessages,
+    sendExtraMessageFields: true,
+
+    // only send the last message to the server:
+    experimental_prepareRequestBody({ messages, id }) {
+      return { message: messages[messages.length - 1], id };
+    },
+
     onResponse() {
-      router.push(`/chat/${id}`);
+      if (pathname === "/") {
+        router.push(`/chat/${id}`);
+      }
     },
   });
   const [containerRef, showScrollButton, scrollToBottom] =
