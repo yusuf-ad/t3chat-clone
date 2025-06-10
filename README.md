@@ -7,8 +7,8 @@
 - [ ] Real-time chat interface with message history
 - [ ] Support for multiple AI models (e.g., GPT-4, Mistral)
 - [ ] Message streaming for real-time responses
-- [ ] Markdown support in messages
-- [ ] Code block formatting
+- [x] Markdown support in messages
+- [x] Code block formatting
 - [ ] Message status indicators (sending, sent, error)
 - [ ] Message timestamps
 - [ ] User avatars and display names
@@ -32,7 +32,7 @@
 
 #### 4. UI/UX Requirements
 
-- [ ] Responsive design (mobile, tablet, desktop)
+- [x] Responsive design (mobile, tablet, desktop)
 - [x] Dark/Light mode
 - [ ] Loading states and animations
 - [ ] Error handling and user feedback

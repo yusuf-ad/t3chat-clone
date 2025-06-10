@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import { useTextareaResize } from "@/hooks/use-textarea-resize";
-import { ArrowUpIcon } from "lucide-react";
+import { ArrowUpIcon, Square } from "lucide-react";
 import type React from "react";
 import { createContext, useContext } from "react";
 
@@ -148,26 +148,12 @@ function ChatInputSubmit({
       <Button
         onClick={onStop}
         className={cn(
-          "h-fit shrink-0 rounded-full border p-1.5 dark:border-zinc-600",
+          "h-fit shrink-0 cursor-pointer rounded-full border p-1.5 hover:bg-gray-200 dark:border-gray-600 dark:hover:bg-gray-700",
           className,
         )}
         {...props}
       >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="currentColor"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          aria-label="Stop"
-        >
-          <title>Stop</title>
-          <rect x="6" y="6" width="12" height="12" />
-        </svg>
+        <Square className="bg-chat-text rounded-xs text-black dark:bg-white dark:text-white" />
       </Button>
     );
   }
