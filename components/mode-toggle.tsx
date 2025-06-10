@@ -4,12 +4,18 @@ import { useTheme } from "next-themes";
 import { Button } from "./ui/button";
 import { Sun, Moon } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useEffect, useState } from "react";
 
 export default function ModeToggle({
   className,
   ...props
 }: React.ComponentProps<"button">) {
   const { setTheme, theme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   return (
     <Button
@@ -21,7 +27,7 @@ export default function ModeToggle({
       {...props}
     >
       <div className="flex h-full w-full items-center justify-center">
-        {theme === "light" ? <Sun /> : <Moon />}
+        {mounted ? theme === "light" ? <Sun /> : <Moon /> : null}
       </div>
       <span className="sr-only">Toggle Sidebar</span>
     </Button>
