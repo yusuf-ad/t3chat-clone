@@ -39,12 +39,24 @@ export default function ChatMessage({ message }: { message: Message }) {
       <div className="group flex flex-col items-start">
         <ChatBubbleMessage
           variant="sent"
-          className="text-chat-text bg-transparent"
+          className="text-chat-text bg-transparent px-0"
         >
           <MarkdownContent content={message.content} id={message.id} />
         </ChatBubbleMessage>
 
-        <div className="pointer-events-none ml-3 opacity-0 group-hover:pointer-events-auto group-hover:opacity-100">
+        {message.annotations?.map(
+          (annotation: any) =>
+            annotation.type === "stop" && (
+              <div
+                className="text-chat-text/75 mb-2 w-full rounded-lg bg-red-200 px-4 py-3 dark:bg-red-900/50 dark:text-red-400"
+                key={annotation?.id}
+              >
+                Stopped by user
+              </div>
+            ),
+        )}
+
+        <div className="pointer-events-none opacity-0 group-hover:pointer-events-auto group-hover:opacity-100">
           <CustomButton className="bg-transparent">
             <Copy />
           </CustomButton>

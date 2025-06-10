@@ -18,8 +18,19 @@ import { useScrollToBottom } from "@/hooks/use-scroll-to-bottom";
 import { useChat } from "@ai-sdk/react";
 
 export default function Home() {
-  const { messages, input, handleInputChange, handleSubmit, stop, status } =
-    useChat();
+  const {
+    messages,
+    input,
+    handleInputChange,
+    handleSubmit,
+    stop,
+    status,
+    setMessages,
+  } = useChat({
+    onResponse(response) {
+      console.log(response);
+    },
+  });
   const [containerRef, showScrollButton, scrollToBottom] =
     useScrollToBottom<HTMLDivElement>();
 
@@ -40,7 +51,7 @@ export default function Home() {
               </div>
             ))}
             {status === "submitted" && (
-              <div className="block px-3">
+              <div className="block">
                 <MessageLoading />
               </div>
             )}
@@ -64,9 +75,24 @@ export default function Home() {
             />
             <ModelSelector className="absolute bottom-2 left-4" />
             <ChatInputSubmit
-              loading={status === "submitted"}
-              onStop={stop}
-              className="bg-sidebar-button h-10 w-10 rounded-lg"
+              loading={status === "submitted" || status === "streaming"}
+              onStop={() => {
+                setMessages((prevMessages) => [
+                  ...prevMessages.slice(0, -1),
+                  {
+                    ...prevMessages[prevMessages.length - 1],
+                    annotations: [
+                      {
+                        id: prevMessages[prevMessages.length - 1].id + "stop",
+                        type: "stop",
+                      },
+                    ],
+                  },
+                ]);
+
+                stop();
+              }}
+              className="bg-sidebar-button hover:bg-sidebar-button-hover h-10 w-10 cursor-pointer rounded-lg"
             />
             {showScrollButton && (
               <ScrollButton
