@@ -11,6 +11,8 @@ export async function POST(req: Request) {
   // get the last message from the client:
   const { message, id } = await req.json();
 
+  console.log("message", message);
+
   // load the previous messages from the server:
   const previousMessages = await loadChat(id);
 
@@ -21,9 +23,39 @@ export async function POST(req: Request) {
   });
 
   const result = streamText({
-    model: openai("gpt-4o-mini"),
+    model: openai("gpt-3.5-turbo-16k"),
     messages,
     system: systemPrompt,
+    abortSignal: req.signal,
+
+    // onerror works only when the client aborts the request immediately before the stream starts for abort signal
+    async onError({ error }) {
+      console.log("error", error);
+
+      if (error instanceof Error) {
+        console.log("error", error);
+
+        if (error.name === "ResponseAborted") {
+          console.log("aborted5", error.name);
+
+          await saveChat({
+            id,
+            messages: appendResponseMessages({
+              messages,
+              responseMessages: [
+                {
+                  id: message.id + "-stop",
+                  role: "assistant",
+                  content: "",
+                },
+              ],
+            }),
+          });
+        }
+      } else {
+        console.log("Unknown error type", error);
+      }
+    },
 
     async onFinish({ response }) {
       await saveChat({

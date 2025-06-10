@@ -51,6 +51,7 @@ export default function ChatInterface({
       }
     },
   });
+
   const [containerRef, showScrollButton, scrollToBottom] =
     useScrollToBottom<HTMLDivElement>();
 
@@ -97,20 +98,52 @@ export default function ChatInterface({
             <ChatInputSubmit
               loading={status === "submitted" || status === "streaming"}
               onStop={() => {
-                setMessages((prevMessages) => [
-                  ...prevMessages.slice(0, -1),
-                  {
-                    ...prevMessages[prevMessages.length - 1],
-                    annotations: [
-                      {
-                        id: prevMessages[prevMessages.length - 1].id + "stop",
-                        type: "stop",
-                      },
-                    ],
-                  },
-                ]);
-
                 stop();
+
+                if (pathname === "/") {
+                  router.push(`/chat/${id}`);
+                }
+
+                setMessages((prevMessages) => {
+                  if (prevMessages.length === 1) {
+                    return [
+                      {
+                        id: messages[messages.length - 1].id,
+                        role: "user",
+                        content: messages[messages.length - 1].content,
+                      },
+                      {
+                        id: messages[messages.length - 1].id + "-stop",
+                        role: "assistant",
+                        content: "",
+                      },
+                    ];
+                  }
+
+                  return [
+                    ...prevMessages?.slice(0, -1),
+                    {
+                      id: messages[messages.length - 1].id + "-stop",
+                      role: "assistant",
+                      content: prevMessages[prevMessages.length - 1].content
+                        ? prevMessages[prevMessages.length - 1].content
+                        : "",
+                    },
+                  ];
+                });
+
+                // setMessages((prevMessages) => [
+                //   ...prevMessages.slice(0, -1),
+                //   {
+                //     ...prevMessages[prevMessages.length - 1],
+                //   },
+                //   {
+                //     ...prevMessages[prevMessages.length - 1],
+                //     id: messages[messages.length - 1].id + "-stop",
+                //     role: "assistant",
+                //     content: messages[messages.length - 1].content,
+                //   },
+                // ]);
               }}
               className="bg-sidebar-button hover:bg-sidebar-button-hover h-10 w-10 cursor-pointer rounded-lg"
             />

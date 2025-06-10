@@ -44,16 +44,10 @@ export default function ChatMessage({ message }: { message: Message }) {
           <MarkdownContent content={message.content} id={message.id} />
         </ChatBubbleMessage>
 
-        {message.annotations?.map(
-          (annotation: any) =>
-            annotation.type === "stop" && (
-              <div
-                className="text-chat-text/75 mb-2 w-full rounded-lg bg-red-200 px-4 py-3 dark:bg-red-900/50 dark:text-red-400"
-                key={annotation?.id}
-              >
-                Stopped by user
-              </div>
-            ),
+        {message.id.endsWith("-stop") && (
+          <div className="text-chat-text/75 mb-2 w-full rounded-lg bg-red-200 px-4 py-3 dark:bg-red-900/50 dark:text-red-400">
+            Stopped by user
+          </div>
         )}
 
         <div className="pointer-events-none opacity-0 group-hover:pointer-events-auto group-hover:opacity-100">
