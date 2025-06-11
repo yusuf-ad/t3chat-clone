@@ -1,6 +1,7 @@
 "use server";
 
 import { loadChat, saveChat } from "@/lib/chat-store";
+import { attempt } from "@/lib/try-catch";
 import { Message } from "ai";
 
 export async function updateChat({
@@ -12,7 +13,7 @@ export async function updateChat({
   questionMessage: Message;
   responseMessage: Message;
 }) {
-  try {
+  const [data, error] = await attempt(async () => {
     const previousMessages = await loadChat(id);
 
     await saveChat({
@@ -29,8 +30,19 @@ export async function updateChat({
         },
       ],
     });
-  } catch (error) {
-    console.error("Error updating chat:", error);
-    throw new Error("Failed to update chat.");
+
+    return {
+      status: "success",
+      message: "Chat updated successfully",
+    };
+  });
+
+  if (error) {
+    return {
+      status: "error",
+      message: error.message,
+    };
+  } else {
+    return data;
   }
 }

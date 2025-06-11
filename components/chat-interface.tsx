@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/chat-message-area";
 import { MessageLoading } from "@/components/ui/message-loading";
 import { useScrollToBottom } from "@/hooks/use-scroll-to-bottom";
+import { attempt } from "@/lib/try-catch";
 import { updateChat } from "@/server/actions/chat";
 
 import { Message, useChat } from "@ai-sdk/react";
@@ -103,10 +104,10 @@ export default function ChatInterface({
       ];
     });
 
-    // update the messages in the server:
-    try {
+    const [data, error] = await attempt(async () => {
+      // update the messages in the server:
       if (!lastMessage.id.startsWith("msg")) {
-        await updateChat({
+        return await updateChat({
           id,
           responseMessage: {
             id: lastMessage.id + "-stop",
@@ -120,7 +121,7 @@ export default function ChatInterface({
           },
         });
       } else {
-        await updateChat({
+        return await updateChat({
           id,
           responseMessage: {
             id: lastMessage.id + "-stop",
@@ -130,8 +131,12 @@ export default function ChatInterface({
           questionMessage: messages[messages.length - 2],
         });
       }
-    } catch (error) {
-      console.error("Error saving chat on stop:", error);
+    });
+
+    if (error) {
+      console.log("Error saving chat on stop:", error);
+    } else {
+      console.log("Chat saved on stop:", await data);
     }
   };
 
