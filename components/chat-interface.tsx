@@ -46,15 +46,88 @@ export default function ChatInterface({
       return { message: messages[messages.length - 1], id };
     },
 
-    onResponse() {
-      if (pathname === "/") {
-        router.push(`/chat/${id}`);
+    onError(error) {
+      let errorMessage =
+        "An unexpected error occurred. Please try again later.";
+      try {
+        const errorResponse = JSON.parse(error.message);
+        if (errorResponse.error) {
+          errorMessage = errorResponse.error;
+        }
+      } catch (e) {
+        console.error("Error parsing error response:", e);
       }
+
+      console.log("💥 Error in chat interface", errorMessage);
     },
   });
 
   const [containerRef, showScrollButton, scrollToBottom] =
     useScrollToBottom<HTMLDivElement>();
+
+  const handleStop = async () => {
+    stop();
+
+    if (pathname === "/") {
+      router.push(`/chat/${id}`);
+    }
+
+    const lastMessage = messages[messages.length - 1];
+
+    // update the messages in the client:
+    setMessages((prevMessages) => {
+      if (!lastMessage.id.startsWith("msg")) {
+        return [
+          ...messages,
+          {
+            id: lastMessage.id + "-stop",
+            role: "assistant",
+            content: "",
+          },
+        ];
+      }
+
+      return [
+        ...prevMessages.slice(0, prevMessages.length - 1),
+        {
+          id: lastMessage.id + "-stop",
+          role: "assistant",
+          content: lastMessage.content,
+        },
+      ];
+    });
+
+    // update the messages in the server:
+    try {
+      if (!lastMessage.id.startsWith("msg")) {
+        await updateChat({
+          id,
+          responseMessage: {
+            id: lastMessage.id + "-stop",
+            role: "assistant",
+            content: "",
+          },
+          questionMessage: {
+            id: lastMessage.id,
+            role: "user",
+            content: lastMessage.content,
+          },
+        });
+      } else {
+        await updateChat({
+          id,
+          responseMessage: {
+            id: lastMessage.id + "-stop",
+            role: "assistant",
+            content: lastMessage.content,
+          },
+          questionMessage: messages[messages.length - 2],
+        });
+      }
+    } catch (error) {
+      console.error("Error saving chat on stop:", error);
+    }
+  };
 
   return (
     <ChatMessageArea
@@ -98,43 +171,7 @@ export default function ChatInterface({
             <ModelSelector className="absolute bottom-2 left-4" />
             <ChatInputSubmit
               loading={status === "submitted" || status === "streaming"}
-              onStop={async () => {
-                stop();
-
-                if (pathname === "/") {
-                  router.push(`/chat/${id}`);
-                }
-
-                const lastMessage = messages[messages.length - 1];
-
-                setMessages((prevMessages) => {
-                  if (!lastMessage.id.startsWith("msg")) {
-                    return [
-                      ...messages,
-                      {
-                        id: lastMessage.id + "-stop",
-                        role: "assistant",
-                        content: "",
-                      },
-                    ];
-                  }
-
-                  return [
-                    ...prevMessages.slice(0, prevMessages.length - 1),
-                    {
-                      id: lastMessage.id + "-stop",
-                      role: "assistant",
-                      content: lastMessage.content,
-                    },
-                  ];
-                });
-
-                await updateChat({
-                  id,
-                  responseMessage: lastMessage,
-                  questionMessage: messages[messages.length - 2],
-                });
-              }}
+              onStop={handleStop}
               className="bg-sidebar-button hover:bg-sidebar-button-hover h-10 w-10 cursor-pointer rounded-lg"
             />
             {showScrollButton && (

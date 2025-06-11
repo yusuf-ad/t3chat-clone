@@ -1,6 +1,7 @@
 import { loadChat, saveChat } from "@/lib/chat-store";
 import { openai } from "@ai-sdk/openai";
 import { appendClientMessage, appendResponseMessages, streamText } from "ai";
+import { NextResponse } from "next/server";
 
 // Allow streaming responses up to 30 seconds
 export const maxDuration = 30;
@@ -11,44 +12,55 @@ export async function POST(req: Request) {
   // get the last message from the client:
   const { message, id } = await req.json();
 
-  // load the previous messages from the server:
-  const previousMessages = await loadChat(id);
+  try {
+    // load the previous messages from the server:
+    const previousMessages = await loadChat(id);
 
-  // append the new message to the previous messages:
-  const messages = appendClientMessage({
-    messages: previousMessages,
-    message,
-  });
+    // append the new message to the previous messages:
+    const messages = appendClientMessage({
+      messages: previousMessages,
+      message,
+    });
 
-  const result = streamText({
-    model: openai("gpt-3.5-turbo-16k"),
-    messages,
-    system: systemPrompt,
-    abortSignal: req.signal,
+    const result = streamText({
+      model: openai("gpt-3.5-turbo-16k"),
+      messages,
+      system: systemPrompt,
+      abortSignal: req.signal,
 
-    async onError({ error }) {
-      console.log("💥 Error in chat route", error);
-      if (error instanceof Error) {
-        if (error.name === "ResponseAborted") {
-          console.log("💥 AbortError in chat route");
+      async onError({ error }) {
+        console.log("💥 Error in chat route", error);
+        if (error instanceof Error) {
+          if (error.name === "ResponseAborted") {
+            console.log("💥 AbortError in chat route");
+          }
         }
-      }
-    },
+      },
 
-    async onFinish({ response }) {
-      await saveChat({
-        id,
-        messages: appendResponseMessages({
-          messages,
-          responseMessages: response.messages,
-        }),
-      });
-    },
-  });
+      async onFinish({ response }) {
+        await saveChat({
+          id,
+          messages: appendResponseMessages({
+            messages,
+            responseMessages: response.messages,
+          }),
+        });
+      },
+    });
 
-  // consume the stream to ensure it runs to completion & triggers onFinish
-  // even when the client response is aborted:
-  result.consumeStream(); // no await
+    // consume the stream to ensure it runs to completion & triggers onFinish
+    // even when the client response is aborted:
+    result.consumeStream(); // no await
 
-  return result.toDataStreamResponse();
+    return result.toDataStreamResponse();
+  } catch (error) {
+    console.error(error);
+
+    return NextResponse.json(
+      {
+        error: "An unexpected error occurred. Please try again later.",
+      },
+      { status: 500 },
+    );
+  }
 }

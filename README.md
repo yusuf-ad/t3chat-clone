@@ -4,9 +4,9 @@
 
 #### 1. Chat Interface
 
-- [ ] Real-time chat interface with message history
+- [x] Real-time chat interface with message history
 - [ ] Support for multiple AI models (e.g., GPT-4, Mistral)
-- [ ] Message streaming for real-time responses
+- [x] Message streaming for real-time responses
 - [x] Markdown support in messages
 - [x] Code block formatting
 - [ ] Message status indicators (sending, sent, error)

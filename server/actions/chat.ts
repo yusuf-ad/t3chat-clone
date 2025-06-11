@@ -12,20 +12,25 @@ export async function updateChat({
   questionMessage: Message;
   responseMessage: Message;
 }) {
-  const previousMessages = await loadChat(id);
+  try {
+    const previousMessages = await loadChat(id);
 
-  await saveChat({
-    id,
-    messages: [
-      ...previousMessages,
-      {
-        ...questionMessage,
-      },
-      {
-        id: responseMessage.id + "-stop",
-        role: "assistant",
-        content: responseMessage.content,
-      },
-    ],
-  });
+    await saveChat({
+      id,
+      messages: [
+        ...previousMessages,
+        {
+          ...questionMessage,
+        },
+        {
+          id: responseMessage.id,
+          role: "assistant",
+          content: responseMessage.content,
+        },
+      ],
+    });
+  } catch (error) {
+    console.error("Error updating chat:", error);
+    throw new Error("Failed to update chat.");
+  }
 }
