@@ -46,6 +46,12 @@ export default function ChatInterface({
       return { message: messages[messages.length - 1], id };
     },
 
+    onFinish() {
+      if (pathname === "/") {
+        router.push(`/chat/${id}`);
+      }
+    },
+
     onError(error) {
       let errorMessage =
         "An unexpected error occurred. Please try again later.";
