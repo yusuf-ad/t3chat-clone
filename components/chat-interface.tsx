@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/chat-message-area";
 import { MessageLoading } from "@/components/ui/message-loading";
 import { useScrollToBottom } from "@/hooks/use-scroll-to-bottom";
+import { updateChat } from "@/server/actions/chat";
 
 import { Message, useChat } from "@ai-sdk/react";
 import { usePathname, useRouter } from "next/navigation";
@@ -35,6 +36,7 @@ export default function ChatInterface({
     stop,
     status,
     setMessages,
+    append,
   } = useChat({
     id,
     initialMessages,
@@ -97,7 +99,7 @@ export default function ChatInterface({
             <ModelSelector className="absolute bottom-2 left-4" />
             <ChatInputSubmit
               loading={status === "submitted" || status === "streaming"}
-              onStop={() => {
+              onStop={async () => {
                 stop();
 
                 if (pathname === "/") {
@@ -105,15 +107,13 @@ export default function ChatInterface({
                 }
 
                 setMessages((prevMessages) => {
-                  if (prevMessages.length === 1) {
+                  const lastMessage = messages[messages.length - 1];
+
+                  if (!lastMessage.id.startsWith("msg")) {
                     return [
+                      ...messages,
                       {
-                        id: messages[messages.length - 1].id,
-                        role: "user",
-                        content: messages[messages.length - 1].content,
-                      },
-                      {
-                        id: messages[messages.length - 1].id + "-stop",
+                        id: lastMessage.id + "-stop",
                         role: "assistant",
                         content: "",
                       },
@@ -121,29 +121,14 @@ export default function ChatInterface({
                   }
 
                   return [
-                    ...prevMessages?.slice(0, -1),
+                    ...prevMessages.slice(0, prevMessages.length - 1),
                     {
-                      id: messages[messages.length - 1].id + "-stop",
+                      id: lastMessage.id + "-stop",
                       role: "assistant",
-                      content: prevMessages[prevMessages.length - 1].content
-                        ? prevMessages[prevMessages.length - 1].content
-                        : "",
+                      content: lastMessage.content,
                     },
                   ];
                 });
-
-                // setMessages((prevMessages) => [
-                //   ...prevMessages.slice(0, -1),
-                //   {
-                //     ...prevMessages[prevMessages.length - 1],
-                //   },
-                //   {
-                //     ...prevMessages[prevMessages.length - 1],
-                //     id: messages[messages.length - 1].id + "-stop",
-                //     role: "assistant",
-                //     content: messages[messages.length - 1].content,
-                //   },
-                // ]);
               }}
               className="bg-sidebar-button hover:bg-sidebar-button-hover h-10 w-10 cursor-pointer rounded-lg"
             />

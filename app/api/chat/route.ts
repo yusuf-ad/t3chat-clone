@@ -1,6 +1,11 @@
 import { loadChat, saveChat } from "@/lib/chat-store";
 import { openai } from "@ai-sdk/openai";
-import { appendClientMessage, appendResponseMessages, streamText } from "ai";
+import {
+  appendClientMessage,
+  appendResponseMessages,
+  Message,
+  streamText,
+} from "ai";
 
 // Allow streaming responses up to 30 seconds
 export const maxDuration = 30;
@@ -9,9 +14,7 @@ const systemPrompt = `You are an AI assistant helping users with tasks like answ
 
 export async function POST(req: Request) {
   // get the last message from the client:
-  const { message, id } = await req.json();
-
-  console.log("message", message);
+  const { message, id }: { message: Message; id: string } = await req.json();
 
   // load the previous messages from the server:
   const previousMessages = await loadChat(id);
@@ -28,32 +31,12 @@ export async function POST(req: Request) {
     system: systemPrompt,
     abortSignal: req.signal,
 
-    // onerror works only when the client aborts the request immediately before the stream starts for abort signal
     async onError({ error }) {
-      console.log("error", error);
-
+      console.log("💥 Error in chat route", error);
       if (error instanceof Error) {
-        console.log("error", error);
-
         if (error.name === "ResponseAborted") {
-          console.log("aborted5", error.name);
-
-          await saveChat({
-            id,
-            messages: appendResponseMessages({
-              messages,
-              responseMessages: [
-                {
-                  id: message.id + "-stop",
-                  role: "assistant",
-                  content: "",
-                },
-              ],
-            }),
-          });
+          console.log("💥 AbortError in chat route");
         }
-      } else {
-        console.log("Unknown error type", error);
       }
     },
 
