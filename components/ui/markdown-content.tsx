@@ -190,7 +190,7 @@ const HighlightedPre = memo(
         </code>
       </pre>
     );
-  }
+  },
 );
 
 HighlightedPre.displayName = "HighlightedPre";
@@ -364,8 +364,8 @@ const components: Partial<Components> = {
     return (
       <code
         className={cn(
-          "rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono text-sm",
-          className
+          "bg-muted rounded px-[0.3rem] py-[0.2rem] font-mono text-sm",
+          className,
         )}
         {...props}
       >
@@ -404,7 +404,7 @@ const MemoizedMarkdownBlock = memo(
       return false;
     }
     return true;
-  }
+  },
 );
 
 MemoizedMarkdownBlock.displayName = "MemoizedMarkdownBlock";
@@ -419,7 +419,7 @@ export const MarkdownContent = memo(
   ({ content, id, className }: MarkdownContentProps) => {
     const blocks = useMemo(
       () => parseMarkdownIntoBlocks(content || ""),
-      [content]
+      [content],
     );
 
     return blocks.map((block, index) => (
@@ -432,7 +432,7 @@ export const MarkdownContent = memo(
         }`}
       />
     ));
-  }
+  },
 );
 
 MarkdownContent.displayName = "MarkdownContent";
