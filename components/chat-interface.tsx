@@ -36,7 +36,6 @@ export default function ChatInterface({
     stop,
     status,
     setMessages,
-    append,
   } = useChat({
     id,
     initialMessages,
@@ -106,9 +105,9 @@ export default function ChatInterface({
                   router.push(`/chat/${id}`);
                 }
 
-                setMessages((prevMessages) => {
-                  const lastMessage = messages[messages.length - 1];
+                const lastMessage = messages[messages.length - 1];
 
+                setMessages((prevMessages) => {
                   if (!lastMessage.id.startsWith("msg")) {
                     return [
                       ...messages,
@@ -128,6 +127,12 @@ export default function ChatInterface({
                       content: lastMessage.content,
                     },
                   ];
+                });
+
+                await updateChat({
+                  id,
+                  responseMessage: lastMessage,
+                  questionMessage: messages[messages.length - 2],
                 });
               }}
               className="bg-sidebar-button hover:bg-sidebar-button-hover h-10 w-10 cursor-pointer rounded-lg"
