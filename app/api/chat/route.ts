@@ -14,7 +14,7 @@ const systemPrompt = `You are an AI assistant helping users with tasks like answ
 
 export async function POST(req: Request) {
   // get the last message from the client:
-  const { message, id }: { message: Message; id: string } = await req.json();
+  const { message, id } = await req.json();
 
   // load the previous messages from the server:
   const previousMessages = await loadChat(id);
