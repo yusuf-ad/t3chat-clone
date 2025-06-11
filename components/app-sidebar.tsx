@@ -45,17 +45,19 @@ export function AppSidebar() {
         </ul>
       </SidebarContent>
 
-      <SidebarFooter className="px-4">
-        <div className="border-sidebar-border-light flex items-center gap-4 border-t py-4">
-          <Avatar className="h-10 w-10">
-            <AvatarImage src={"/avatar.png"} />
-          </Avatar>
+      <SidebarFooter className="border-sidebar-border-light px-4">
+        <div className="border-t">
+          <div className="hover:bg-sidebar-border-light mb-6 flex cursor-pointer items-center gap-3 rounded-lg px-3 py-3">
+            <Avatar className="h-8 w-8">
+              <AvatarImage src={"/avatar.png"} />
+            </Avatar>
 
-          <div className="flex flex-col justify-center">
-            <h4 className="text-sidebar-logo text-sm font-semibold">
-              Yusuf Ad
-            </h4>
-            <span className="text-sidebar-text-muted text-xs">Pro</span>
+            <div className="flex flex-col justify-center">
+              <h4 className="text-sidebar-logo text-sm font-semibold">
+                Yusuf Ad
+              </h4>
+              <span className="text-sidebar-text-muted text-xs">Pro</span>
+            </div>
           </div>
         </div>
       </SidebarFooter>
