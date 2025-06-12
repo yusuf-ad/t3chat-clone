@@ -1,3 +1,4 @@
+import CustomButton from "@/components/custom-button";
 import { Button } from "@/components/ui/button";
 import { TablerBrandGoogle } from "@/components/ui/icons/google-icon";
 import { SignInButton } from "@clerk/nextjs";
@@ -9,9 +10,9 @@ export default function AuthPage() {
     <div className="bg-sidebar flex min-h-screen flex-col">
       {/* Back to Chat */}
       <div className="absolute top-4 left-4">
-        <Button
+        <CustomButton
           asChild
-          className="hover:bg-sidebar-border-light px-4 py-2"
+          className="hover:bg-sidebar-border-light! w-auto bg-transparent px-4 py-2"
           variant="ghost"
         >
           <Link
@@ -21,7 +22,7 @@ export default function AuthPage() {
             <ArrowLeftIcon className="h-4 w-4" />
             Back to Chat
           </Link>
-        </Button>
+        </CustomButton>
       </div>
       {/* Centered Card */}
       <div className="flex flex-1 flex-col items-center justify-center">

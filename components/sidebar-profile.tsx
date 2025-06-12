@@ -23,7 +23,7 @@ export default async function SidebarProfile() {
 
   return (
     <button className="border-t">
-      <Link href="/auth">
+      <Link href="/settings">
         <div className="hover:bg-sidebar-border-light mb-2 flex cursor-pointer items-center gap-3 rounded-lg px-3 py-3">
           <Avatar className="h-8 w-8">
             <AvatarImage src={user?.imageUrl} />

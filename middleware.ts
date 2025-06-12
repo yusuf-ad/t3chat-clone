@@ -9,6 +9,10 @@ export default clerkMiddleware(async (auth, req) => {
   if (userId && pathname.startsWith("/auth")) {
     return NextResponse.redirect(new URL("/", req.url));
   }
+
+  if (!userId && pathname.startsWith("/settings")) {
+    return NextResponse.redirect(new URL("/auth", req.url));
+  }
 });
 
 export const config = {
