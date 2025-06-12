@@ -44,3 +44,5 @@ my-notes.md
 /design
 
 .chats
+# clerk configuration (can include secrets)
+/.clerk/

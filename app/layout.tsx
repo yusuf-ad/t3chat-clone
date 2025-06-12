@@ -7,6 +7,8 @@ import { CustomTrigger } from "@/components/custom-trigger";
 import { ThemeProvider } from "@/components/theme-provider";
 import { SettingsBar } from "@/components/settings-bar";
 
+import { ClerkProvider } from "@clerk/nextjs";
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -28,31 +30,25 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="en"
-      className={`${geistSans.variable} ${geistMono.variable}`}
-      suppressHydrationWarning
-    >
-      <body
-        className={`bg-background selection:bg-sidebar-logo relative antialiased selection:text-white dark:selection:text-black`}
+    <ClerkProvider>
+      <html
+        lang="en"
+        className={`${geistSans.variable} ${geistMono.variable}`}
+        suppressHydrationWarning
       >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="light"
-          enableSystem
-          disableTransitionOnChange
+        <body
+          className={`bg-background selection:bg-sidebar-logo relative antialiased selection:text-white dark:selection:text-black`}
         >
-          <SidebarProvider defaultOpen={false}>
-            <AppSidebar />
-
-            <main className="h-screen min-h-screen w-full overflow-y-hidden">
-              <CustomTrigger />
-              <SettingsBar />
-              {children}
-            </main>
-          </SidebarProvider>
-        </ThemeProvider>
-      </body>
-    </html>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="light"
+            enableSystem
+            disableTransitionOnChange
+          >
+            {children}
+          </ThemeProvider>
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }
