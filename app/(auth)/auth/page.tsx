@@ -1,8 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { TablerBrandGoogle } from "@/components/ui/icons/google-icon";
-import { GoogleOneTap } from "@clerk/nextjs";
+import { SignInButton } from "@clerk/nextjs";
 import { ArrowLeftIcon } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
 
 export default function AuthPage() {
@@ -36,10 +35,12 @@ export default function AuthPage() {
             <span className="align-middle">😏</span>)
           </p>
           <div className="relative mb-6 w-full max-w-sm rounded-lg bg-gradient-to-r from-purple-600 via-purple-950 to-purple-700 p-[1px]">
-            <Button className="bg-interactive-primary text-interactive-ghost hover:bg-interactive-primary-hover flex h-14 w-full cursor-pointer items-center justify-center gap-4 rounded-lg py-4 text-base font-semibold shadow-sm transition dark:bg-purple-300 dark:text-purple-950 dark:hover:bg-purple-400">
-              <TablerBrandGoogle />
-              Continue with Google
-            </Button>
+            <SignInButton mode="redirect">
+              <Button className="bg-interactive-primary text-interactive-ghost hover:bg-interactive-primary-hover flex h-14 w-full cursor-pointer items-center justify-center gap-4 rounded-lg py-4 text-base font-semibold shadow-sm transition dark:bg-purple-300 dark:text-purple-950 dark:hover:bg-purple-400">
+                <TablerBrandGoogle />
+                Continue with Google
+              </Button>
+            </SignInButton>
           </div>
           <p className="dark:text-muted-foreground text-center text-xs">
             By continuing, you agree to our{" "}
