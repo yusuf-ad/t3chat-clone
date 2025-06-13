@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { useUser } from "@clerk/nextjs";
+import { useState } from "react";
 
 import {
   SparklesIcon,
@@ -24,10 +25,41 @@ const questions = [
   "What is the meaning of life?",
 ];
 
+const actionQuestions = {
+  Create: [
+    "How can I create a new project?",
+    "What are the best practices for starting a new application?",
+    "How do I set up a development environment?",
+    "What tools should I use for my project?",
+  ],
+  Explore: [
+    "What are the latest trends in technology?",
+    "How can I discover new programming languages?",
+    "What are some interesting open-source projects?",
+    "How do I find learning resources?",
+  ],
+  Code: [
+    "How do I debug my code effectively?",
+    "What are some common coding patterns?",
+    "How can I improve my code quality?",
+    "What are the best practices for testing?",
+  ],
+  Learn: [
+    "What are the fundamentals I should learn first?",
+    "How can I improve my programming skills?",
+    "What are the best learning resources?",
+    "How do I stay updated with new technologies?",
+  ],
+};
+
 export default function ChatWelcome() {
   const { user } = useUser();
-
+  const [selectedAction, setSelectedAction] = useState<string | null>(null);
   const userName = user?.firstName ?? "";
+
+  const handleActionClick = (actionName: string) => {
+    setSelectedAction(actionName);
+  };
 
   return (
     <div className="animate-in fade-in-50 zoom-in-95 flex h-full flex-col items-center justify-center px-10 duration-300">
@@ -38,8 +70,13 @@ export default function ChatWelcome() {
       <div className="my-8 flex w-full gap-4">
         {actions.map((action) => (
           <Button
-            className="bg-interactive-secondary text-interactive-secondary-text hover:bg-interactive-secondary-hover hover:text-interactive-secondary-text flex-1 cursor-pointer border-0 py-6 font-semibold"
+            className={`${
+              selectedAction === action.name
+                ? "bg-sidebar-button hover:bg-sidebar-button-hover dark:text-white"
+                : "bg-interactive-secondary text-interactive-secondary-text hover:bg-interactive-secondary-hover hover:text-interactive-secondary-text"
+            } flex-1 cursor-pointer border-0 py-6 font-semibold`}
             key={action.name}
+            onClick={() => handleActionClick(action.name)}
           >
             <action.icon className="mr-2 h-5 w-5" />
             {action.name}
@@ -48,7 +85,10 @@ export default function ChatWelcome() {
       </div>
 
       <div className="mt-4 flex w-full flex-col gap-2">
-        {questions.map((question) => (
+        {(selectedAction
+          ? actionQuestions[selectedAction as keyof typeof actionQuestions]
+          : questions
+        ).map((question) => (
           <div
             key={question}
             className="border-sidebar-border-light flex-1 pb-1 not-last:border-b"
