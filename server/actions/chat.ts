@@ -2,16 +2,16 @@
 
 import { loadChat, saveChat } from "@/lib/chat-store";
 import { attempt } from "@/lib/try-catch";
-import { Message } from "ai";
+import { DBMessage } from "@/schema";
 
-export async function updateChat({
+export async function storePausedMessages({
   id,
   questionMessage,
   responseMessage,
 }: {
   id: string;
-  questionMessage: Message;
-  responseMessage: Message;
+  questionMessage: DBMessage;
+  responseMessage: DBMessage;
 }) {
   const [data, error] = await attempt(async () => {
     const previousMessages = await loadChat(id);
@@ -24,9 +24,7 @@ export async function updateChat({
           ...questionMessage,
         },
         {
-          id: responseMessage.id,
-          role: "assistant",
-          content: responseMessage.content,
+          ...responseMessage,
         },
       ],
     });

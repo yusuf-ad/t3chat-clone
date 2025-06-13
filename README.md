@@ -15,12 +15,10 @@
 
 #### 2. Authentication & User Management
 
-- [ ] User registration and login
-- [ ] OAuth integration (Google, GitHub)
+- [x] User registration and login
+- [x] OAuth integration (Google)
 - [ ] User profile management
 - [ ] Session management
-- [ ] Password reset functionality
-- [ ] Email verification
 
 #### 3. Data Management
 

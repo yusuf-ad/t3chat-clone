@@ -7,7 +7,7 @@ import { ChatMessageArea } from "@/components/ui/chat-message-area";
 import { MessageLoading } from "@/components/ui/message-loading";
 import { useScrollToBottom } from "@/hooks/use-scroll-to-bottom";
 import { attempt } from "@/lib/try-catch";
-import { updateChat } from "@/server/actions/chat";
+import { storePausedMessages } from "@/server/actions/chat";
 
 import { Message, useChat } from "@ai-sdk/react";
 import { usePathname, useRouter } from "next/navigation";
@@ -65,7 +65,7 @@ export default function ChatInterface({
   const [containerRef, showScrollButton, scrollToBottom] =
     useScrollToBottom<HTMLDivElement>();
 
-  const handleStop = async () => {
+  const handleStopStream = async () => {
     stop();
 
     if (pathname === "/") {
@@ -83,6 +83,12 @@ export default function ChatInterface({
             id: lastMessage.id + "-stop",
             role: "assistant",
             content: "",
+            parts: [
+              {
+                type: "text",
+                text: "",
+              },
+            ],
           },
         ];
       }
@@ -92,34 +98,56 @@ export default function ChatInterface({
         {
           id: lastMessage.id + "-stop",
           role: "assistant",
-          content: lastMessage.content,
+          content: "",
+          parts: [
+            {
+              type: "text",
+              text: lastMessage.content,
+            },
+          ],
         },
       ];
     });
 
-    const [data, error] = await attempt(async () => {
+    const [, error] = await attempt(async () => {
       // update the messages in the server:
       if (!lastMessage.id.startsWith("msg")) {
-        return await updateChat({
+        return await storePausedMessages({
+          id,
+          responseMessage: {
+            id: lastMessage.id + "-stop",
+            role: "assistant",
+            parts: [
+              {
+                type: "text",
+                text: "",
+              },
+            ],
+          },
+          questionMessage: {
+            id: lastMessage.id,
+            role: "user",
+            parts: [
+              {
+                type: "text",
+                text: lastMessage.content,
+              },
+            ],
+          },
+        });
+      } else {
+        return await storePausedMessages({
           id,
           responseMessage: {
             id: lastMessage.id + "-stop",
             role: "assistant",
             content: "",
-          },
-          questionMessage: {
-            id: lastMessage.id,
-            role: "user",
-            content: lastMessage.content,
-          },
-        });
-      } else {
-        return await updateChat({
-          id,
-          responseMessage: {
-            id: lastMessage.id + "-stop",
-            role: "assistant",
-            content: lastMessage.content,
+            parts: [
+              {
+                type: "text",
+                text: lastMessage.content,
+              },
+            ],
           },
           questionMessage: messages[messages.length - 2],
         });
@@ -128,8 +156,6 @@ export default function ChatInterface({
 
     if (error) {
       console.log("Error saving chat on stop:", error);
-    } else {
-      console.log("Chat saved on stop:", await data);
     }
   };
 
@@ -165,7 +191,7 @@ export default function ChatInterface({
           showScrollButton={showScrollButton}
           onInputChange={handleInputChange}
           onSubmit={handleSubmit}
-          onStop={handleStop}
+          onStop={handleStopStream}
           onScrollToBottom={scrollToBottom}
         />
       </div>
