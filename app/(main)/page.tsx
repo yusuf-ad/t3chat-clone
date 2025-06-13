@@ -1,7 +1,7 @@
 import ChatInterface from "@/components/chat-interface";
 import ChatWelcome from "@/components/chat-welcome";
 import { PreviewChatInput } from "@/components/preview-chat-input";
-import { createChat } from "@/lib/chat-store";
+import { generateUUID } from "@/lib/utils";
 import { auth } from "@clerk/nextjs/server";
 
 export default async function Home() {
@@ -16,7 +16,7 @@ export default async function Home() {
     );
   }
 
-  const id = await createChat();
+  const id = generateUUID();
 
   return <ChatInterface id={id} />;
 }

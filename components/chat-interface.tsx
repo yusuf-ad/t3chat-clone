@@ -12,6 +12,7 @@ import { storePausedMessages } from "@/server/actions/chat";
 import { Message, useChat } from "@ai-sdk/react";
 import { usePathname, useRouter } from "next/navigation";
 import { ChatInputContainer } from "@/components/chat-input-container";
+import { generateUUID } from "@/lib/utils";
 
 export default function ChatInterface({
   id,
@@ -34,6 +35,7 @@ export default function ChatInterface({
     id,
     initialMessages,
     sendExtraMessageFields: true,
+    generateId: generateUUID,
 
     // only send the last message to the server:
     experimental_prepareRequestBody({ messages, id }) {

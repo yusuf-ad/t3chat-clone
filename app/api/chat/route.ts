@@ -1,5 +1,15 @@
 import { loadChat, saveChat } from "@/lib/chat-store";
+import { ChatSDKError } from "@/lib/errors";
+import { attempt } from "@/lib/try-catch";
+import { generateUUID, getTrailingMessageId } from "@/lib/utils";
+import { createChat, getChatById } from "@/server/actions/chat";
+import {
+  generateTitleFromUserMessage,
+  getMessagesByChatId,
+  saveMessages,
+} from "@/server/actions/message";
 import { openai } from "@ai-sdk/openai";
+import { auth } from "@clerk/nextjs/server";
 import { appendClientMessage, appendResponseMessages, streamText } from "ai";
 import { NextResponse } from "next/server";
 
@@ -12,15 +22,67 @@ export async function POST(req: Request) {
   // get the last message from the client:
   const { message, id } = await req.json();
 
+  console.log("💥 id", id);
+  console.log("💥 message", message);
+
   try {
+    const { userId } = await auth();
+
+    if (!userId) {
+      return new ChatSDKError("unauthorized:chat").toResponse();
+    }
+
+    const [chat, error] = await attempt(getChatById({ id }));
+
+    console.log("💥 chat", chat);
+    console.log("💥 error", error);
+
+    if (!chat) {
+      const title = await generateTitleFromUserMessage({
+        message,
+      });
+
+      await createChat({
+        id,
+        userId,
+        title,
+      });
+    } else {
+      if (chat.userId !== userId) {
+        return new ChatSDKError("forbidden:chat").toResponse();
+      }
+    }
+
     // load the previous messages from the server:
-    const previousMessages = await loadChat(id);
+    const previousMessages = await getMessagesByChatId({ id });
 
     // append the new message to the previous messages:
     const messages = appendClientMessage({
+      // @ts-expect-error: todo add type conversion from DBMessage[] to UIMessage[]
       messages: previousMessages,
       message,
     });
+
+    console.log("💥 message!!!!", message);
+
+    const [, error2] = await attempt(async () => {
+      return await saveMessages({
+        messages: [
+          {
+            chatId: id,
+            id: message.id,
+            role: "user",
+            parts: message.parts,
+            attachments: message.experimental_attachments ?? [],
+            createdAt: new Date(),
+          },
+        ],
+      });
+    });
+
+    if (error2) {
+      console.error("💥 Error in chat route222", error2);
+    }
 
     const result = streamText({
       model: openai("gpt-3.5-turbo-16k"),
@@ -38,13 +100,29 @@ export async function POST(req: Request) {
       },
 
       async onFinish({ response }) {
-        await saveChat({
-          id,
-          messages: appendResponseMessages({
-            messages,
-            responseMessages: response.messages,
-          }),
-        });
+        if (userId) {
+          try {
+            const [, assistantMessage] = appendResponseMessages({
+              messages: [message],
+              responseMessages: response.messages,
+            });
+
+            await saveMessages({
+              messages: [
+                {
+                  id: generateUUID(),
+                  chatId: id,
+                  role: assistantMessage.role,
+                  parts: assistantMessage.parts,
+                  attachments: assistantMessage.experimental_attachments ?? [],
+                  createdAt: new Date(),
+                },
+              ],
+            });
+          } catch (_) {
+            console.error("Failed to save chat");
+          }
+        }
       },
     });
 
@@ -58,7 +136,10 @@ export async function POST(req: Request) {
 
     return NextResponse.json(
       {
-        error: "An unexpected error occurred. Please try again later.",
+        error:
+          error instanceof Error
+            ? error.message
+            : "An unexpected error occurred. Please try again later.",
       },
       { status: 500 },
     );
