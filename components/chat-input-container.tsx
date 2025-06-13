@@ -7,7 +7,6 @@ import {
   ChatInputTextArea,
 } from "@/components/ui/chat-input";
 import { ScrollButton } from "@/components/ui/chat-message-area";
-import { Message } from "@ai-sdk/react";
 
 interface ChatInputContainerProps {
   input: string;

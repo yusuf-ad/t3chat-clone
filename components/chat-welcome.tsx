@@ -1,4 +1,7 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
+import { useUser } from "@clerk/nextjs";
 
 import {
   SparklesIcon,
@@ -22,10 +25,14 @@ const questions = [
 ];
 
 export default function ChatWelcome() {
+  const { user } = useUser();
+
+  const userName = user?.firstName ?? "";
+
   return (
     <div className="animate-in fade-in-50 zoom-in-95 flex h-full flex-col items-center justify-center px-10 duration-300">
       <h2 className="text-interactive-secondary-text text-3xl font-bold tracking-wide">
-        How can I help you, Yusuf?
+        How can I help you{userName ? `, ${userName}` : ""}?
       </h2>
 
       <div className="my-8 flex w-full gap-4">
