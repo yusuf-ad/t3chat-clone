@@ -141,7 +141,6 @@ export default function ChatInterface({
           responseMessage: {
             id: lastMessage.id + "-stop",
             role: "assistant",
-            content: "",
             parts: [
               {
                 type: "text",

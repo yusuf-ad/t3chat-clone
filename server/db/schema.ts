@@ -12,10 +12,8 @@ export const chat = pgTable("Chat", {
   id: uuid("id").primaryKey().notNull().defaultRandom(),
   createdAt: timestamp("createdAt").notNull().defaultNow(),
   title: text("title").notNull(),
+  // the userId column will be used to store the Clerk user ID
   userId: text("userId").notNull(),
-  visibility: varchar("visibility", { enum: ["public", "private"] })
-    .notNull()
-    .default("private"),
 });
 
 export type Chat = InferSelectModel<typeof chat>;
