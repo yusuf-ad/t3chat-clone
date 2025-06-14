@@ -10,6 +10,8 @@ import ModeToggle from "./mode-toggle";
 import SidebarProfile from "./sidebar-profile";
 import { auth } from "@clerk/nextjs/server";
 import SidebarHistory from "./sidebar-history";
+import { Suspense } from "react";
+import SidebarProfileSkeleton from "./skeletons/sidebar-profile-skeleton";
 
 export async function AppSidebar() {
   const { userId } = await auth();
@@ -43,7 +45,9 @@ export async function AppSidebar() {
       </SidebarContent>
 
       <SidebarFooter className="border-sidebar-border-light px-4">
-        <SidebarProfile />
+        <Suspense fallback={<SidebarProfileSkeleton />}>
+          <SidebarProfile />
+        </Suspense>
       </SidebarFooter>
     </Sidebar>
   );
