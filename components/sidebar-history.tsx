@@ -67,10 +67,10 @@ export default async function SidebarHistory({ userId }: { userId: string }) {
               {groupedChats.today.map((chat) => (
                 <li
                   key={chat.id}
-                  className="hover:bg-sidebar-border-light last flex h-9 items-center rounded-lg px-2 py-2 text-sm"
+                  className="hover:bg-sidebar-border-light last flex items-center rounded-lg text-sm"
                 >
                   <Link
-                    className="text-sidebar-link block truncate"
+                    className="text-sidebar-link block h-9 truncate px-2 py-2"
                     href={`/chat/${chat.id}`}
                   >
                     {chat.title}
