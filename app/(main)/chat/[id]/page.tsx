@@ -1,12 +1,11 @@
 import ChatInterface from "@/components/chat-interface";
 import { PreviewChatInput } from "@/components/preview-chat-input";
-import { loadChat } from "@/lib/chat-store";
 import { attempt } from "@/lib/try-catch";
 import { getChatById } from "@/server/actions/chat";
 import { getMessagesByChatId } from "@/server/actions/message";
 import { DBMessage } from "@/server/db/schema";
 import { auth } from "@clerk/nextjs/server";
-import { Attachment, UIMessage } from "ai";
+import { UIMessage } from "ai";
 
 export default async function ChatPage({
   params,
@@ -24,16 +23,24 @@ export default async function ChatPage({
   }
 
   const { id } = await params;
-  const chat = await getChatById({ id });
+  const [chat] = await attempt(getChatById({ id }));
 
   if (!chat) {
-    return <div>Chat not found</div>;
+    return (
+      <div className="relative mx-auto flex h-full w-full max-w-3xl flex-col px-2 pt-14">
+        <div className="text-sidebar-text-muted">Chat not found</div>
+      </div>
+    );
   }
 
   const [messagesFromDb, error] = await attempt(getMessagesByChatId({ id }));
 
   if (error) {
-    return <div>Error loading messages</div>;
+    return (
+      <div className="relative mx-auto flex h-full w-full max-w-3xl flex-col px-2 pt-14">
+        <div className="text-sidebar-text-muted">Error loading messages</div>
+      </div>
+    );
   }
 
   function convertToUIMessages(messages: Array<DBMessage>): Array<UIMessage> {
@@ -44,12 +51,9 @@ export default async function ChatPage({
       // Note: content will soon be deprecated in @ai-sdk/react
       content: "",
       createdAt: message.createdAt,
-      experimental_attachments:
-        (message.attachments as Array<Attachment>) ?? [],
+      annotations: message.annotations as UIMessage["annotations"],
     }));
   }
-
-  console.log("💥 messagesFromDb", messagesFromDb);
 
   return (
     <ChatInterface

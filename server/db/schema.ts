@@ -25,7 +25,7 @@ export const message = pgTable("Message", {
     .references(() => chat.id, { onDelete: "cascade" }),
   role: varchar("role").notNull(),
   parts: json("parts").notNull(),
-  attachments: json("attachments").notNull(),
+  annotations: json("annotations").notNull(),
   createdAt: timestamp("createdAt").notNull().defaultNow(),
 });
 

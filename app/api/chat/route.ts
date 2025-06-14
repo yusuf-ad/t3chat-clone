@@ -22,9 +22,6 @@ export async function POST(req: Request) {
   // get the last message from the client:
   const { message, id } = await req.json();
 
-  console.log("💥 id", id);
-  console.log("💥 message", message);
-
   try {
     const { userId } = await auth();
 
@@ -72,7 +69,7 @@ export async function POST(req: Request) {
             id: message.id,
             role: "user",
             parts: message.parts,
-            attachments: message.experimental_attachments ?? [],
+            annotations: [],
             createdAt: new Date(),
           },
         ],
@@ -113,7 +110,7 @@ export async function POST(req: Request) {
                   chatId: id,
                   role: assistantMessage.role,
                   parts: assistantMessage.parts,
-                  attachments: assistantMessage.experimental_attachments ?? [],
+                  annotations: [],
                   createdAt: new Date(),
                 },
               ],

@@ -78,7 +78,7 @@ export default function ChatInterface({
 
     // update the messages in the client:
     setMessages((prevMessages) => {
-      if (!lastMessage.id.startsWith("msg")) {
+      if (lastMessage.role === "user") {
         return [
           ...messages,
           {
@@ -89,6 +89,11 @@ export default function ChatInterface({
               {
                 type: "text",
                 text: "",
+              },
+            ],
+            annotations: [
+              {
+                hasStopped: true,
               },
             ],
           },
@@ -107,12 +112,17 @@ export default function ChatInterface({
               text: lastMessage.content,
             },
           ],
+          annotations: [
+            {
+              hasStopped: true,
+            },
+          ],
         },
       ];
     });
 
+    // update the messages in the server:
     const [, error] = await attempt(async () => {
-      // update the messages in the server:
       if (!lastMessage.id.startsWith("msg")) {
         return await storePausedMessages({
           id,

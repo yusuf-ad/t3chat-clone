@@ -55,6 +55,16 @@ export default function ChatMessage({ message }: { message: Message }) {
                     </div>
                   )}
 
+                  {message.annotations?.some((annotation) => {
+                    if (
+                      typeof annotation === "object" &&
+                      annotation !== null &&
+                      "hasStopped" in annotation
+                    ) {
+                      return annotation.hasStopped;
+                    }
+                  })}
+
                   <div className="pointer-events-none opacity-0 group-hover:pointer-events-auto group-hover:opacity-100">
                     <CustomButton className="bg-transparent">
                       <Copy />
