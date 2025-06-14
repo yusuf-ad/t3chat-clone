@@ -1,6 +1,5 @@
 "use server";
 
-import { loadChat, saveChat } from "@/lib/chat-store";
 import { attempt } from "@/lib/try-catch";
 
 import type { UIMessage } from "ai";
@@ -8,47 +7,40 @@ import { db } from "../db";
 import { chat } from "../db/schema";
 import { eq } from "drizzle-orm";
 import { ChatSDKError } from "@/lib/errors";
+import { saveMessages } from "./message";
 
 export type Message = Omit<UIMessage, "content">;
 
 export async function storePausedMessages({
   id,
-  questionMessage,
   responseMessage,
 }: {
   id: string;
-  questionMessage: Message;
   responseMessage: Message;
 }) {
-  const [data, error] = await attempt(async () => {
-    const previousMessages = await loadChat(id);
-
-    await saveChat({
-      id,
+  // use this function to save the messages that are paused
+  // when the user stops the stream
+  const [, error] = await attempt(
+    saveMessages({
       messages: [
-        ...previousMessages,
         {
-          ...questionMessage,
-        },
-        {
-          ...responseMessage,
+          chatId: id,
+          id: responseMessage.id,
+          role: "assistant",
+          parts: responseMessage.parts,
+          annotations: [
+            {
+              hasStopped: true,
+            },
+          ],
+          createdAt: responseMessage.createdAt ?? new Date(),
         },
       ],
-    });
-
-    return {
-      status: "success",
-      message: "Chat updated successfully",
-    };
-  });
+    }),
+  );
 
   if (error) {
-    return {
-      status: "error",
-      message: error.message,
-    };
-  } else {
-    return data;
+    throw new ChatSDKError("bad_request:database", "Failed to save chat");
   }
 }
 

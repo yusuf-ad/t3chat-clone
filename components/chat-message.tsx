@@ -49,19 +49,20 @@ export default function ChatMessage({ message }: { message: Message }) {
                     <MarkdownContent content={part.text} id={message.id} />
                   </ChatBubbleMessage>
 
-                  {message.id.endsWith("-stop") && (
-                    <div className="text-chat-text/75 mb-2 w-full rounded-lg bg-red-200 px-4 py-3 dark:bg-red-900/50 dark:text-red-400">
-                      Stopped by user
-                    </div>
-                  )}
-
-                  {message.annotations?.some((annotation) => {
+                  {message.annotations?.map((annotation, index) => {
                     if (
                       typeof annotation === "object" &&
                       annotation !== null &&
                       "hasStopped" in annotation
                     ) {
-                      return annotation.hasStopped;
+                      return (
+                        <div
+                          key={`annotation-${index}`}
+                          className="text-chat-text/75 mb-2 w-full rounded-lg bg-red-200 px-4 py-3 dark:bg-red-900/50 dark:text-red-400"
+                        >
+                          Stopped by user
+                        </div>
+                      );
                     }
                   })}
 

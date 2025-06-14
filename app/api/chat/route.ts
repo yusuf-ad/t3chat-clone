@@ -1,4 +1,3 @@
-import { loadChat, saveChat } from "@/lib/chat-store";
 import { ChatSDKError } from "@/lib/errors";
 import { attempt } from "@/lib/try-catch";
 import { generateUUID, getTrailingMessageId } from "@/lib/utils";
@@ -77,7 +76,7 @@ export async function POST(req: Request) {
     });
 
     if (saveMessagesError) {
-      console.error("💥 Error in chat route222", saveMessagesError);
+      console.error("💥 Error in chat route455646546", saveMessagesError);
     }
 
     const result = streamText({
@@ -85,12 +84,43 @@ export async function POST(req: Request) {
       messages,
       system: systemPrompt,
       abortSignal: req.signal,
+      experimental_generateMessageId: generateUUID,
 
       async onError({ error }) {
         console.log("💥 Error in chat route", error);
         if (error instanceof Error) {
+          // use this function to save the messages that are immediately stopped by the user
           if (error.name === "ResponseAborted") {
-            console.log("💥 AbortError in chat route");
+            const [, saveMessagesError] = await attempt(async () => {
+              return await saveMessages({
+                messages: [
+                  {
+                    chatId: id,
+                    id: generateUUID(),
+                    role: "assistant",
+                    parts: [
+                      {
+                        type: "text",
+                        text: "",
+                      },
+                    ],
+                    annotations: [
+                      {
+                        hasStopped: true,
+                      },
+                    ],
+                    createdAt: new Date(),
+                  },
+                ],
+              });
+            });
+
+            if (saveMessagesError) {
+              throw new ChatSDKError(
+                "bad_request:database",
+                "Failed to save messages",
+              );
+            }
           }
         }
       },
@@ -98,6 +128,16 @@ export async function POST(req: Request) {
       async onFinish({ response }) {
         if (userId) {
           try {
+            const assistantId = getTrailingMessageId({
+              messages: response.messages.filter(
+                (message) => message.role === "assistant",
+              ),
+            });
+
+            if (!assistantId) {
+              throw new Error("No assistant message found!");
+            }
+
             const [, assistantMessage] = appendResponseMessages({
               messages: [message],
               responseMessages: response.messages,

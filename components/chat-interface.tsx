@@ -70,10 +70,6 @@ export default function ChatInterface({
   const handleStopStream = async () => {
     stop();
 
-    if (pathname === "/") {
-      router.push(`/chat/${id}`);
-    }
-
     const lastMessage = messages[messages.length - 1];
 
     // update the messages in the client:
@@ -123,35 +119,11 @@ export default function ChatInterface({
 
     // update the messages in the server:
     const [, error] = await attempt(async () => {
-      if (!lastMessage.id.startsWith("msg")) {
+      if (lastMessage.role === "assistant") {
         return await storePausedMessages({
           id,
           responseMessage: {
-            id: lastMessage.id + "-stop",
-            role: "assistant",
-            parts: [
-              {
-                type: "text",
-                text: "",
-              },
-            ],
-          },
-          questionMessage: {
             id: lastMessage.id,
-            role: "user",
-            parts: [
-              {
-                type: "text",
-                text: lastMessage.content,
-              },
-            ],
-          },
-        });
-      } else {
-        return await storePausedMessages({
-          id,
-          responseMessage: {
-            id: lastMessage.id + "-stop",
             role: "assistant",
             parts: [
               {
@@ -159,14 +131,18 @@ export default function ChatInterface({
                 text: lastMessage.content,
               },
             ],
+            createdAt: lastMessage.createdAt,
           },
-          questionMessage: messages[messages.length - 2],
         });
       }
     });
 
     if (error) {
       console.log("Error saving chat on stop:", error);
+    }
+
+    if (pathname === "/") {
+      router.push(`/chat/${id}`);
     }
   };
 
