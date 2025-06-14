@@ -34,7 +34,7 @@ export async function AppSidebar() {
         </Button>
       </SidebarHeader>
 
-      <SidebarContent className="px-4">
+      <SidebarContent className="scrollbar-hide overflow-y-auto px-4">
         {userId ? (
           <SidebarHistory userId={userId} />
         ) : (
