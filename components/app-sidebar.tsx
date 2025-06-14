@@ -8,8 +8,12 @@ import { Button } from "./ui/button";
 import Link from "next/link";
 import ModeToggle from "./mode-toggle";
 import SidebarProfile from "./sidebar-profile";
+import { auth } from "@clerk/nextjs/server";
+import SidebarHistory from "./sidebar-history";
 
-export function AppSidebar() {
+export async function AppSidebar() {
+  const { userId } = await auth();
+
   return (
     <Sidebar className="duration-100">
       <SidebarHeader className="px-4 py-4">
@@ -31,18 +35,11 @@ export function AppSidebar() {
       </SidebarHeader>
 
       <SidebarContent className="px-4">
-        <h3 className="text-sidebar-heading text-xs font-semibold tracking-widest uppercase">
-          Last 30 Days
-        </h3>
-
-        <ul className="my-2">
-          <li className="px-2">
-            <Link className="text-sidebar-link block truncate" href={"/"}>
-              Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet consectetur
-              adipisicing elit. Officia, nobis.
-            </Link>
-          </li>
-        </ul>
+        {userId ? (
+          <SidebarHistory userId={userId} />
+        ) : (
+          <div>Please sign in to continue</div>
+        )}
       </SidebarContent>
 
       <SidebarFooter className="border-sidebar-border-light px-4">

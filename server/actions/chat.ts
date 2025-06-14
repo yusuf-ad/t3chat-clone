@@ -72,6 +72,7 @@ export async function createChat({
   if (error) {
     throw new ChatSDKError("bad_request:database", "Failed to save chat");
   }
+
   return data;
 }
 
@@ -80,8 +81,30 @@ export async function getChatById({ id }: { id: string }) {
     const [chatRow] = await db.select().from(chat).where(eq(chat.id, id));
     return chatRow;
   });
+
   if (error) {
     throw new ChatSDKError("bad_request:database", "Failed to get chat by id");
   }
+
   return selectedChat;
+}
+
+export async function getChatHistory({ userId }: { userId: string }) {
+  const [data, error] = await attempt(async () => {
+    const chatHistory = await db
+      .select()
+      .from(chat)
+      .where(eq(chat.userId, userId));
+
+    return chatHistory;
+  });
+
+  if (error) {
+    throw new ChatSDKError(
+      "bad_request:database",
+      "Failed to get chat history",
+    );
+  }
+
+  return data;
 }

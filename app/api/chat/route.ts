@@ -32,10 +32,11 @@ export async function POST(req: Request) {
       return new ChatSDKError("unauthorized:chat").toResponse();
     }
 
-    const [chat, error] = await attempt(getChatById({ id }));
+    const [chat, chatError] = await attempt(getChatById({ id }));
 
-    console.log("💥 chat", chat);
-    console.log("💥 error", error);
+    if (chatError) {
+      console.error("💥 Error in chat route", chatError);
+    }
 
     if (!chat) {
       const title = await generateTitleFromUserMessage({
@@ -63,9 +64,7 @@ export async function POST(req: Request) {
       message,
     });
 
-    console.log("💥 message!!!!", message);
-
-    const [, error2] = await attempt(async () => {
+    const [, saveMessagesError] = await attempt(async () => {
       return await saveMessages({
         messages: [
           {
@@ -80,8 +79,8 @@ export async function POST(req: Request) {
       });
     });
 
-    if (error2) {
-      console.error("💥 Error in chat route222", error2);
+    if (saveMessagesError) {
+      console.error("💥 Error in chat route222", saveMessagesError);
     }
 
     const result = streamText({
