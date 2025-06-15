@@ -22,7 +22,7 @@ import {
   getModelById,
   getAllProviders,
   getModelsByProvider,
-} from "@/lib/ai-providers";
+} from "@/lib/ai/ai-providers";
 import { ModelInfo } from "./model-info";
 
 // Provider icon mapping

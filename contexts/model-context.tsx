@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useContext, useState, ReactNode } from "react";
-import { DEFAULT_MODEL } from "@/lib/ai-providers";
+import { DEFAULT_MODEL } from "@/lib/ai/ai-providers";
 
 interface ModelContextType {
   selectedModel: string;

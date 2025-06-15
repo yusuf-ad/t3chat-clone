@@ -7,15 +7,15 @@ import {
   getMessagesByChatId,
   saveMessages,
 } from "@/server/actions/message";
-import { getLanguageModel, DEFAULT_MODEL } from "@/lib/ai-providers";
+import { getLanguageModel, DEFAULT_MODEL } from "@/lib/ai/ai-providers";
 import { auth } from "@clerk/nextjs/server";
 import { appendClientMessage, appendResponseMessages, streamText } from "ai";
 import { NextResponse } from "next/server";
+import { RequestHints, systemPrompt } from "@/lib/ai/prompts";
+import { geolocation } from "@vercel/functions";
 
 // Allow streaming responses up to 30 seconds
 export const maxDuration = 30;
-
-const systemPrompt = `You are an AI assistant helping users with tasks like answering questions, brainstorming, drafting text, and coding. Follow these guidelines: 1) Be helpful and accurate - provide clear info, admit uncertainty. 2) Be polite and engaging - use friendly tone, match user's style. 3) Prioritize user intent - understand needs, ask if unclear. 4) Structure responses - use lists, format code properly. 5) Follow ethics - no harmful content, respect privacy. 6) Stay context-aware - track conversation, summarize when helpful. Format in Markdown.`;
 
 export async function POST(req: Request) {
   // get the last message from the client:
@@ -61,6 +61,17 @@ export async function POST(req: Request) {
       message,
     });
 
+    const { longitude, latitude, city, country } = geolocation(req);
+
+    const requestHints: RequestHints = {
+      longitude,
+      latitude,
+      city,
+      country,
+      time: new Date().toLocaleString(),
+      timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+    };
+
     const [, saveMessagesError] = await attempt(async () => {
       return await saveMessages({
         messages: [
@@ -86,7 +97,7 @@ export async function POST(req: Request) {
     const result = streamText({
       model: languageModel,
       messages,
-      system: systemPrompt,
+      system: systemPrompt({ requestHints }),
       abortSignal: req.signal,
       experimental_generateMessageId: generateUUID,
 
