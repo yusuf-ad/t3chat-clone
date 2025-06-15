@@ -6,6 +6,7 @@ import { attempt } from "@/lib/try-catch";
 import { Button } from "./ui/button";
 import { Pencil, Pin, Trash2 } from "lucide-react";
 import CustomButton from "./custom-button";
+import { DeleteChatDialog } from "./delete-chat-dialog";
 
 type GroupedChats = {
   today: Chat[];
@@ -79,18 +80,16 @@ export default async function SidebarHistory({ userId }: { userId: string }) {
                   className="hover:bg-sidebar-border-light group/item relative flex items-center overflow-hidden rounded-lg text-sm"
                 >
                   <Link
-                    className="text-sidebar-link block h-9 w-full truncate px-2 py-2"
+                    className="text-sidebar-link block h-9 flex-1 truncate px-2 py-2"
                     href={`/chat/${chat.id}`}
                   >
                     {chat.title}
                   </Link>
-                  <div className="absolute right-1 flex translate-x-full items-center transition-transform duration-150 group-hover/item:flex group-hover/item:translate-x-0">
+                  <div className="absolute right-1 flex translate-x-full items-center transition-transform duration-150 group-focus-within/item:hidden group-focus-within/item:translate-x-0 group-hover/item:translate-x-0">
                     <CustomButton className="hover:bg-sidebar-button-hover hover:text-white">
                       <Pin />
                     </CustomButton>
-                    <CustomButton className="hover:bg-sidebar-button-hover hover:text-white">
-                      <Trash2 />
-                    </CustomButton>
+                    <DeleteChatDialog title={chat.title} />
                   </div>
                 </li>
               ))}
@@ -107,7 +106,7 @@ export default async function SidebarHistory({ userId }: { userId: string }) {
               {groupedChats.yesterday.map((chat) => (
                 <li
                   key={chat.id}
-                  className="hover:bg-sidebar-border-light last flex h-9 items-center rounded-lg px-2 py-2 text-sm"
+                  className="hover:bg-sidebar-border-light flex h-9 items-center rounded-lg px-2 py-2 text-sm"
                 >
                   <Link
                     className="text-sidebar-link block truncate"
