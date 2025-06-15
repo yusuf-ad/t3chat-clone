@@ -3,6 +3,9 @@ import { subWeeks, subMonths, isToday, isYesterday } from "date-fns";
 import { getChatHistory } from "@/server/actions/chat";
 import Link from "next/link";
 import { attempt } from "@/lib/try-catch";
+import { Button } from "./ui/button";
+import { Pencil, Pin, Trash2 } from "lucide-react";
+import CustomButton from "./custom-button";
 
 type GroupedChats = {
   today: Chat[];
@@ -73,14 +76,22 @@ export default async function SidebarHistory({ userId }: { userId: string }) {
               {groupedChats.today.map((chat) => (
                 <li
                   key={chat.id}
-                  className="hover:bg-sidebar-border-light last flex items-center rounded-lg text-sm"
+                  className="hover:bg-sidebar-border-light group/item relative flex items-center overflow-hidden rounded-lg text-sm"
                 >
                   <Link
-                    className="text-sidebar-link block h-9 truncate px-2 py-2"
+                    className="text-sidebar-link block h-9 w-full truncate px-2 py-2"
                     href={`/chat/${chat.id}`}
                   >
                     {chat.title}
                   </Link>
+                  <div className="absolute right-1 flex translate-x-full items-center transition-transform duration-150 group-hover/item:flex group-hover/item:translate-x-0">
+                    <CustomButton className="hover:bg-sidebar-button-hover hover:text-white">
+                      <Pin />
+                    </CustomButton>
+                    <CustomButton className="hover:bg-sidebar-button-hover hover:text-white">
+                      <Trash2 />
+                    </CustomButton>
+                  </div>
                 </li>
               ))}
             </ul>
