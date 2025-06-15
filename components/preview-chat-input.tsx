@@ -10,10 +10,10 @@ import {
 export function PreviewChatInput() {
   return (
     <div className="sticky bottom-0 mt-auto w-full">
-      <div className="absolute inset-0 rounded-2xl rounded-t-[20px] bg-white/30 backdrop-blur-md dark:bg-black/30" />
+      <div className="absolute inset-0 rounded-2xl rounded-t-[20px] rounded-b-none border-8 border-b-0 bg-white/30 backdrop-blur-md dark:bg-black/30" />
       <ChatInput
         variant="default"
-        className="border-sidebar-border focus-within:ring-sidebar-border text-sidebar-logo relative min-h-28 w-full cursor-not-allowed rounded-2xl rounded-t-[20px] rounded-b-none border-8 border-b-0 bg-transparent font-semibold opacity-70 shadow-xl"
+        className="border-sidebar-border/5 focus-within:ring-sidebar-border text-sidebar-logo relative min-h-28 w-full rounded-2xl rounded-t-[20px] rounded-b-none border-8 border-b-0 bg-transparent font-semibold shadow-xl"
       >
         <ChatInputTextArea
           className="text-chat-text placeholder:text-text-placeholder cursor-not-allowed dark:bg-transparent"

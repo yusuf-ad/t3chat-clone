@@ -10,7 +10,7 @@ export default async function Home() {
   if (!userId) {
     return (
       <div className="relative mx-auto flex h-full w-full max-w-3xl flex-col px-2 pt-14">
-        <ChatWelcome />
+        <ChatWelcome isPreview={true} />
         <PreviewChatInput />
       </div>
     );
