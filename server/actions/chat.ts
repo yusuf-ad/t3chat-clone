@@ -8,6 +8,7 @@ import { chat } from "../db/schema";
 import { eq } from "drizzle-orm";
 import { ChatSDKError } from "@/lib/errors";
 import { saveMessages } from "./message";
+import { revalidateTag, unstable_cache } from "next/cache";
 
 export type Message = Omit<UIMessage, "content">;
 
@@ -65,6 +66,8 @@ export async function createChat({
     throw new ChatSDKError("bad_request:database", "Failed to save chat");
   }
 
+  revalidateTag("chat-history");
+
   return data;
 }
 
@@ -81,22 +84,29 @@ export async function getChatById({ id }: { id: string }) {
   return selectedChat;
 }
 
-export async function getChatHistory({ userId }: { userId: string }) {
-  const [data, error] = await attempt(async () => {
-    const chatHistory = await db
-      .select()
-      .from(chat)
-      .where(eq(chat.userId, userId));
+export const getChatHistory = unstable_cache(
+  async function getChatHistory({ userId }: { userId: string }) {
+    const [data, error] = await attempt(async () => {
+      const chatHistory = await db
+        .select()
+        .from(chat)
+        .where(eq(chat.userId, userId));
 
-    return chatHistory;
-  });
+      return chatHistory;
+    });
 
-  if (error) {
-    throw new ChatSDKError(
-      "bad_request:database",
-      "Failed to get chat history",
-    );
-  }
+    if (error) {
+      throw new ChatSDKError(
+        "bad_request:database",
+        "Failed to get chat history",
+      );
+    }
 
-  return data;
-}
+    return data;
+  },
+  ["userId"],
+  {
+    revalidate: 60 * 60,
+    tags: ["chat-history"],
+  },
+);
