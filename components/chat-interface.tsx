@@ -13,6 +13,7 @@ import { Message, useChat } from "@ai-sdk/react";
 import { usePathname, useRouter } from "next/navigation";
 import { ChatInputContainer } from "@/components/chat-input-container";
 import { generateUUID } from "@/lib/utils";
+import { useModel } from "@/contexts/model-context";
 
 export default function ChatInterface({
   id,
@@ -23,6 +24,7 @@ export default function ChatInterface({
 }) {
   const router = useRouter();
   const pathname = usePathname();
+  const { selectedModel } = useModel();
   const {
     messages,
     input,
@@ -39,7 +41,11 @@ export default function ChatInterface({
 
     // only send the last message to the server:
     experimental_prepareRequestBody({ messages, id }) {
-      return { message: messages[messages.length - 1], id };
+      return {
+        message: messages[messages.length - 1],
+        id,
+        model: selectedModel,
+      };
     },
 
     onFinish() {

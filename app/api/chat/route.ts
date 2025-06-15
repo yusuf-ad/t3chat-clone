@@ -7,7 +7,7 @@ import {
   getMessagesByChatId,
   saveMessages,
 } from "@/server/actions/message";
-import { openai } from "@ai-sdk/openai";
+import { getLanguageModel, DEFAULT_MODEL } from "@/lib/ai-providers";
 import { auth } from "@clerk/nextjs/server";
 import { appendClientMessage, appendResponseMessages, streamText } from "ai";
 import { NextResponse } from "next/server";
@@ -20,7 +20,7 @@ const systemPrompt = `You are an AI assistant helping users with tasks like answ
 export async function POST(req: Request) {
   // get the last message from the client:
 
-  const { message, id } = await req.json();
+  const { message, id, model } = await req.json();
 
   try {
     const { userId } = await auth();
@@ -77,11 +77,14 @@ export async function POST(req: Request) {
     });
 
     if (saveMessagesError) {
-      console.error("💥 Error in chat route455646546", saveMessagesError);
+      console.error("💥 Error in chat route", saveMessagesError);
     }
 
+    const selectedModel = model || DEFAULT_MODEL;
+    const languageModel = getLanguageModel(selectedModel);
+
     const result = streamText({
-      model: openai("gpt-3.5-turbo-16k"),
+      model: languageModel,
       messages,
       system: systemPrompt,
       abortSignal: req.signal,

@@ -9,7 +9,7 @@ export function ModelInfo({ modelInfo }: { modelInfo: string }) {
   return (
     <Tooltip>
       <TooltipTrigger asChild>
-        <button className="p-1">
+        <button className="cursor-pointer p-1">
           <Info className="h-3 w-3" />
         </button>
       </TooltipTrigger>

@@ -1,6 +1,6 @@
 import CustomButton from "@/components/custom-button";
 import { Button } from "@/components/ui/button";
-import { TablerBrandGoogle } from "@/components/ui/icons/google-icon";
+import { GoogleIcon } from "@/components/ui/icons/google-icon";
 import { SignInButton } from "@clerk/nextjs";
 import { ArrowLeftIcon } from "lucide-react";
 import Link from "next/link";
@@ -38,7 +38,7 @@ export default function AuthPage() {
           <div className="relative mb-6 w-full max-w-sm rounded-lg bg-gradient-to-r from-purple-600 via-purple-950 to-purple-700 p-[1px]">
             <SignInButton mode="redirect">
               <Button className="bg-interactive-primary text-interactive-ghost hover:bg-interactive-primary-hover flex h-14 w-full cursor-pointer items-center justify-center gap-4 rounded-lg py-4 text-base font-semibold shadow-sm transition dark:bg-purple-300 dark:text-purple-950 dark:hover:bg-purple-400">
-                <TablerBrandGoogle />
+                <GoogleIcon />
                 Continue with Google
               </Button>
             </SignInButton>

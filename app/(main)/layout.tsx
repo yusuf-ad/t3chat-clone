@@ -4,6 +4,7 @@ import { CustomTrigger } from "@/components/custom-trigger";
 import { SettingsBar } from "@/components/settings-bar";
 import { AppSidebar } from "@/components/app-sidebar";
 import { SidebarProvider } from "@/components/ui/sidebar";
+import { ModelProvider } from "@/contexts/model-context";
 
 import { cookies } from "next/headers";
 
@@ -21,14 +22,16 @@ export default async function MainLayout({
   const defaultOpen = cookieStore.get("sidebar_state")?.value === "true";
 
   return (
-    <SidebarProvider defaultOpen={defaultOpen}>
-      <AppSidebar />
+    <ModelProvider>
+      <SidebarProvider defaultOpen={defaultOpen}>
+        <AppSidebar />
 
-      <main className="h-screen min-h-screen w-full overflow-y-hidden">
-        <CustomTrigger />
-        <SettingsBar />
-        {children}
-      </main>
-    </SidebarProvider>
+        <main className="h-screen min-h-screen w-full overflow-y-hidden">
+          <CustomTrigger />
+          <SettingsBar />
+          {children}
+        </main>
+      </SidebarProvider>
+    </ModelProvider>
   );
 }
