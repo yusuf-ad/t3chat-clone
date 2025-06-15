@@ -19,6 +19,7 @@ const systemPrompt = `You are an AI assistant helping users with tasks like answ
 
 export async function POST(req: Request) {
   // get the last message from the client:
+
   const { message, id } = await req.json();
 
   try {

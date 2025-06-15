@@ -16,7 +16,11 @@ export default function ChatMessage({ message }: { message: Message }) {
         if (type === "text") {
           if (isUser) {
             return (
-              <ChatBubble key={key} variant="sent">
+              <ChatBubble
+                className="max-w-[80%] justify-self-end break-words"
+                key={key}
+                variant="sent"
+              >
                 <div className="group flex flex-col items-end gap-1">
                   <ChatBubbleMessage
                     className="bg-chat-user-background text-chat-text px-4 py-3"
@@ -40,8 +44,12 @@ export default function ChatMessage({ message }: { message: Message }) {
             );
           } else {
             return (
-              <ChatBubble key={key} variant="received">
-                <div className="group flex flex-col items-start">
+              <ChatBubble
+                className="w-full max-w-full break-words"
+                key={key}
+                variant="received"
+              >
+                <div className="group flex w-full flex-col items-start">
                   <ChatBubbleMessage
                     variant="sent"
                     className="text-chat-text bg-transparent px-0"

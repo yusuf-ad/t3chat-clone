@@ -156,9 +156,9 @@ export default function ChatInterface({
         className="relative mx-auto flex h-full w-full max-w-3xl flex-col px-2 pt-14"
       >
         {messages.length > 0 || input.length > 0 ? (
-          <div className="px-4 pb-8">
+          <div className="flex flex-col px-4 pb-8">
             {messages.map((message) => (
-              <div key={message.id}>
+              <div className="flex-1" key={message.id}>
                 <ChatMessage message={message} />
               </div>
             ))}
