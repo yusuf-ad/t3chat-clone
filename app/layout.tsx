@@ -9,6 +9,7 @@ import { SettingsBar } from "@/components/settings-bar";
 
 import { ClerkProvider } from "@clerk/nextjs";
 import { Suspense } from "react";
+import { Toaster } from "@/components/ui/sonner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -46,6 +47,7 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
+            <Toaster />
             <Suspense fallback={<div />}>{children}</Suspense>
           </ThemeProvider>
         </body>

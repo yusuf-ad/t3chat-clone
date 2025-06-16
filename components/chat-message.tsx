@@ -3,6 +3,7 @@ import { ChatBubble, ChatBubbleMessage } from "./ui/chat-bubble";
 import { MarkdownContent } from "./ui/markdown-content";
 import { Copy, Edit, RefreshCcw } from "lucide-react";
 import CustomButton from "./custom-button";
+import CopyButton from "./ui/copy-button";
 
 export default function ChatMessage({ message }: { message: Message }) {
   const isUser = message.role === "user";
@@ -35,9 +36,7 @@ export default function ChatMessage({ message }: { message: Message }) {
                     <CustomButton className="bg-transparent">
                       <Edit />
                     </CustomButton>
-                    <CustomButton className="bg-transparent">
-                      <Copy />
-                    </CustomButton>
+                    <CopyButton value={part.text} />
                   </div>
                 </div>
               </ChatBubble>
@@ -75,9 +74,7 @@ export default function ChatMessage({ message }: { message: Message }) {
                   })}
 
                   <div className="pointer-events-none opacity-0 group-hover:pointer-events-auto group-hover:opacity-100">
-                    <CustomButton className="bg-transparent">
-                      <Copy />
-                    </CustomButton>
+                    <CopyButton value={part.text} />
                     <CustomButton className="bg-transparent">
                       <RefreshCcw />
                     </CustomButton>
