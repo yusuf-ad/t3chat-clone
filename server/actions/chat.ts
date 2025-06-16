@@ -71,6 +71,20 @@ export async function createChat({
   return data;
 }
 
+export async function deleteChat({ id }: { id: string }) {
+  const [data, error] = await attempt(async () => {
+    await db.delete(chat).where(eq(chat.id, id));
+  });
+
+  if (error) {
+    throw new ChatSDKError("bad_request:database", "Failed to delete chat");
+  }
+
+  revalidateTag("chat-history");
+
+  return data;
+}
+
 export async function getChatById({ id }: { id: string }) {
   const [selectedChat, error] = await attempt(async () => {
     const [chatRow] = await db.select().from(chat).where(eq(chat.id, id));
