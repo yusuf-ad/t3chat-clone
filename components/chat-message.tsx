@@ -30,10 +30,16 @@ export default function ChatMessage({ message }: { message: Message }) {
                     <MarkdownContent content={part.text} id={message.id} />
                   </ChatBubbleMessage>
                   <div className="pointer-events-none opacity-0 group-hover:pointer-events-auto group-hover:opacity-100">
-                    <CustomButton className="bg-transparent">
+                    <CustomButton
+                      description="Retry message"
+                      className="bg-transparent"
+                    >
                       <RefreshCcw />
                     </CustomButton>
-                    <CustomButton className="bg-transparent">
+                    <CustomButton
+                      description="Edit message"
+                      className="bg-transparent"
+                    >
                       <Edit />
                     </CustomButton>
                     <CopyButton value={part.text} />
@@ -75,7 +81,10 @@ export default function ChatMessage({ message }: { message: Message }) {
 
                   <div className="pointer-events-none opacity-0 group-hover:pointer-events-auto group-hover:opacity-100">
                     <CopyButton value={part.text} />
-                    <CustomButton className="bg-transparent">
+                    <CustomButton
+                      description="Retry message"
+                      className="bg-transparent"
+                    >
                       <RefreshCcw />
                     </CustomButton>
                   </div>

@@ -29,6 +29,7 @@ export default function CopyButton({
 
   return (
     <CustomButton
+      description="Copy message"
       className={clsx("bg-transparent", className)}
       onClick={copyToClipboard}
     >
