@@ -7,6 +7,7 @@ import Link from "next/link";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import CustomizationTab from "@/components/settings/tabs/customization-tab";
 import ModelsTab from "@/components/settings/tabs/models-tab";
+import ApiKeysTab from "@/components/settings/tabs/apikeys-tab";
 
 export default async function SettingsPage() {
   return (
@@ -54,10 +55,10 @@ export default async function SettingsPage() {
               <TabsTrigger className="cursor-pointer" value="models">
                 Models
               </TabsTrigger>
-              <TabsTrigger className="cursor-pointer" value="API Keys">
+              <TabsTrigger className="cursor-pointer" value="api-keys">
                 API Keys
               </TabsTrigger>
-              <TabsTrigger className="cursor-pointer" value="Contact us">
+              <TabsTrigger className="cursor-pointer" value="contact-us">
                 Contact us
               </TabsTrigger>
             </TabsList>
@@ -66,6 +67,9 @@ export default async function SettingsPage() {
             </TabsContent>
             <TabsContent value="models">
               <ModelsTab />
+            </TabsContent>
+            <TabsContent value="api-keys">
+              <ApiKeysTab />
             </TabsContent>
           </Tabs>
         </div>
