@@ -27,32 +27,38 @@ const questions = [
 
 const actionQuestions = {
   Create: [
-    "How can I create a new project?",
-    "What are the best practices for starting a new application?",
-    "How do I set up a development environment?",
-    "What tools should I use for my project?",
+    "Write a short story about a robot discovering emotions",
+    "Help me outline a sci-fi novel set in a post-apocalyptic world",
+    "Create a character profile for a complex villain with sympathetic motives",
+    "Give me 5 creative writing prompts for flash fiction",
   ],
   Explore: [
-    "What are the latest trends in technology?",
-    "How can I discover new programming languages?",
-    "What are some interesting open-source projects?",
-    "How do I find learning resources?",
+    "Good books for fans of Rick Rubin",
+    "Countries ranked by number of corgis",
+    "Most successful companies in the world",
+    "How much does Claude cost?",
   ],
   Code: [
-    "How do I debug my code effectively?",
-    "What are some common coding patterns?",
-    "How can I improve my code quality?",
-    "What are the best practices for testing?",
+    "Write code to invert a binary search tree in Python",
+    "What's the difference between Promise.all and Promise.allSettled?",
+    "Explain React's useEffect cleanup function",
+    "Best practices for error handling in async/await",
   ],
   Learn: [
-    "What are the fundamentals I should learn first?",
-    "How can I improve my programming skills?",
-    "What are the best learning resources?",
-    "How do I stay updated with new technologies?",
+    "Beginner's guide to TypeScript",
+    "Explain the CAP theorem in distributed systems",
+    "Why is AI so expensive?",
+    "Are black holes real?",
   ],
 };
 
-export default function ChatWelcome({ isPreview }: { isPreview?: boolean }) {
+export default function ChatWelcome({
+  isPreview,
+  onQuestionClick,
+}: {
+  isPreview?: boolean;
+  onQuestionClick?: (q: string) => void;
+}) {
   const { user, isLoaded } = useUser();
   const [selectedAction, setSelectedAction] = useState<string | null>(null);
   const userName = user?.firstName ?? "";
@@ -103,7 +109,10 @@ export default function ChatWelcome({ isPreview }: { isPreview?: boolean }) {
             key={question}
             className="border-sidebar-border-light flex-1 pb-1 not-last:border-b"
           >
-            <Button className="text-interactive-ghost-text hover:bg-interactive-secondary-hover hover:text-interactive-secondary-text flex w-full cursor-pointer items-center justify-start bg-transparent py-5 font-semibold tracking-wide shadow-none">
+            <Button
+              className="text-interactive-ghost-text hover:bg-interactive-secondary-hover hover:text-interactive-secondary-text flex w-full cursor-pointer items-center justify-start bg-transparent py-5 font-semibold tracking-wide shadow-none"
+              onClick={() => onQuestionClick?.(question)}
+            >
               {question}
             </Button>
           </div>

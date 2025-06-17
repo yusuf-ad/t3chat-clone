@@ -31,6 +31,7 @@ export default function ChatInterface({
     messages,
     input,
     handleInputChange,
+    setInput,
     handleSubmit,
     stop,
     status,
@@ -203,7 +204,7 @@ export default function ChatInterface({
             )}
           </div>
         ) : (
-          <ChatWelcome />
+          <ChatWelcome onQuestionClick={setInput} />
         )}
 
         <ChatInputContainer

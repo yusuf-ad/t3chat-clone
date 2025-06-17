@@ -173,7 +173,7 @@ function ChatInputSubmit({
       }}
       {...props}
     >
-      <ArrowUpIcon className="text-black dark:text-white" />
+      <ArrowUpIcon className="text-white" />
     </Button>
   );
 }
