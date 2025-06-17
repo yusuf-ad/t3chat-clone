@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { X, Plus } from "lucide-react";
-import { Badge } from "../ui/badge";
+import { Badge } from "../../ui/badge";
 
 const SUGGESTED_TRAITS = [
   "friendly",

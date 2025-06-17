@@ -5,7 +5,8 @@ import { SignOutButton } from "@clerk/nextjs";
 import { ArrowLeftIcon } from "lucide-react";
 import Link from "next/link";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import CustomizationTab from "@/components/settings/customization-tab";
+import CustomizationTab from "@/components/settings/tabs/customization-tab";
+import ModelsTab from "@/components/settings/tabs/models-tab";
 
 export default async function SettingsPage() {
   return (
@@ -63,7 +64,9 @@ export default async function SettingsPage() {
             <TabsContent value="customization">
               <CustomizationTab />
             </TabsContent>
-            <TabsContent value="models">Change your password here.</TabsContent>
+            <TabsContent value="models">
+              <ModelsTab />
+            </TabsContent>
           </Tabs>
         </div>
       </main>
