@@ -1,4 +1,4 @@
-import { openai as originalOpenAI } from "@ai-sdk/openai";
+import { openai as originalOpenAI, createOpenAI } from "@ai-sdk/openai";
 import { anthropic as originalAnthropic } from "@ai-sdk/anthropic";
 import { mistral as originalMistral } from "@ai-sdk/mistral";
 import { google as originalGoogle } from "@ai-sdk/google";
@@ -194,7 +194,46 @@ export function getAllProviders(): string[] {
 // Default model configuration
 export const DEFAULT_MODEL = "openai:gpt-4o-mini";
 
-// Get language model from registry
-export function getLanguageModel(modelId: string) {
+// Create custom OpenAI provider with user's API key
+export function createCustomOpenAIProvider(apiKey: string) {
+  const customOpenAI = createOpenAI({
+    apiKey: apiKey,
+    compatibility: "strict",
+  });
+
+  return customProvider({
+    languageModels: {
+      "gpt-4o": customOpenAI("gpt-4o", {
+        structuredOutputs: true,
+      }),
+      "gpt-4o-mini": customOpenAI("gpt-4o-mini", {
+        structuredOutputs: true,
+      }),
+      "gpt-4-turbo": customOpenAI("gpt-4-turbo"),
+      // Aliases for easier access
+      flagship: customOpenAI("gpt-4o", {
+        structuredOutputs: true,
+      }),
+      fast: customOpenAI("gpt-4o-mini", {
+        structuredOutputs: true,
+      }),
+    },
+    fallbackProvider: customOpenAI,
+  });
+}
+
+// Get language model from registry or custom provider
+export function getLanguageModel(
+  modelId: string,
+  customApiKeys?: { openai?: string },
+) {
+  // If user provided OpenAI API key and is using OpenAI model, use custom provider
+  if (customApiKeys?.openai && modelId.startsWith("openai:")) {
+    const customProvider = createCustomOpenAIProvider(customApiKeys.openai);
+    const modelName = modelId.replace("openai:", "");
+    return customProvider.languageModel(modelName as any);
+  }
+
+  // Otherwise use the default registry
   return registry.languageModel(modelId as any);
 }

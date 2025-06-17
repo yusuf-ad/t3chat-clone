@@ -24,6 +24,7 @@ import {
   getModelsByProvider,
 } from "@/lib/ai/ai-providers";
 import { ModelInfo } from "./model-info";
+import ApiKeyIndicator from "./api-key-indicator";
 
 // Provider icon mapping
 const providerIcons: Record<
@@ -59,6 +60,7 @@ export function ModelSelector({
                   className: "w-4 h-4",
                 })}
                 <span className="text-sm font-medium">{currentModel.name}</span>
+                <ApiKeyIndicator modelId={selectedModel} className="ml-1" />
               </>
             )}
           </div>

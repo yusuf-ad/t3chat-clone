@@ -1,4 +1,5 @@
 import "@/styles/globals.css";
+import { Suspense } from "react";
 
 export const metadata = {
   title: "Auth",
@@ -10,5 +11,5 @@ export default function AuthLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return <>{children}</>;
+  return <Suspense fallback={<div />}>{children}</Suspense>;
 }

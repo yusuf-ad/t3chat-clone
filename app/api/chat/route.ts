@@ -20,7 +20,7 @@ export const maxDuration = 30;
 export async function POST(req: Request) {
   // get the last message from the client:
 
-  const { message, id, model } = await req.json();
+  const { message, id, model, apiKeys } = await req.json();
 
   try {
     const { userId } = await auth();
@@ -38,6 +38,7 @@ export async function POST(req: Request) {
     if (!chat) {
       const title = await generateTitleFromUserMessage({
         message,
+        apiKeys,
       });
 
       await createChat({
@@ -92,7 +93,7 @@ export async function POST(req: Request) {
     }
 
     const selectedModel = model || DEFAULT_MODEL;
-    const languageModel = getLanguageModel(selectedModel);
+    const languageModel = getLanguageModel(selectedModel, apiKeys);
 
     const result = streamText({
       model: languageModel,
@@ -183,7 +184,7 @@ export async function POST(req: Request) {
 
     return result.toDataStreamResponse();
   } catch (error) {
-    console.error(error);
+    console.error("error", error);
 
     return NextResponse.json(
       {

@@ -14,6 +14,8 @@ import { usePathname, useRouter } from "next/navigation";
 import { ChatInputContainer } from "@/components/chat-input-container";
 import { generateUUID } from "@/lib/utils";
 import { useModel } from "@/contexts/model-context";
+import { getStoredApiKeys } from "@/lib/api-keys";
+import { toast } from "sonner";
 
 export default function ChatInterface({
   id,
@@ -41,10 +43,14 @@ export default function ChatInterface({
 
     // only send the last message to the server:
     experimental_prepareRequestBody({ messages, id }) {
+      // Get stored API keys to send with request
+      const apiKeys = getStoredApiKeys();
+
       return {
         message: messages[messages.length - 1],
         id,
         model: selectedModel,
+        apiKeys,
       };
     },
 
@@ -66,7 +72,11 @@ export default function ChatInterface({
         console.error("Error parsing error response:", e);
       }
 
-      console.log("💥 Error in chat interface", errorMessage);
+      if (pathname === "/") {
+        router.push(`/chat/${id}`);
+      }
+
+      toast.error(errorMessage);
     },
   });
 
