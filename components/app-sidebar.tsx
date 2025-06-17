@@ -31,8 +31,13 @@ export async function AppSidebar() {
           <ModeToggle className="block md:hidden" />
         </div>
 
-        <Button className="bg-sidebar-button hover:bg-sidebar-button-hover my-2 py-4 shadow-xl hover:cursor-pointer dark:text-white">
-          <span className="font-bold">New Chat</span>
+        <Button
+          asChild
+          className="bg-sidebar-button hover:bg-sidebar-button-hover my-2 py-4 shadow-xl hover:cursor-pointer dark:text-white"
+        >
+          <Link href="/">
+            <span className="font-bold">New Chat</span>
+          </Link>
         </Button>
       </SidebarHeader>
 
