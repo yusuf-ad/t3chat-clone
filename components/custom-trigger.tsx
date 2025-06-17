@@ -38,7 +38,7 @@ export function CustomTrigger() {
         disabled={pathname === "/"}
         className={`text-sidebar-logo hover:bg-sidebar-border-light h-8 w-8 cursor-pointer bg-transparent shadow-none transition-all duration-200 ease-in-out ${
           open ? "-translate-x-20 opacity-0" : "translate-x-0 opacity-100"
-        } ${pathname === "/" ? "pointer-events-none opacity-50" : ""}`}
+        } ${pathname === "/" && !open ? "pointer-events-none opacity-50" : ""}`}
       >
         <Link href="/">
           <PlusIcon />
