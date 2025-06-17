@@ -138,3 +138,11 @@ export function hasValidApiKey(provider: ApiKeyProvider): boolean {
   const validation = validateApiKey(provider, apiKey);
   return validation.isValid;
 }
+
+/**
+ * Remove all API keys from localStorage
+ */
+export function clearAllApiKeys() {
+  if (typeof window === "undefined") return;
+  localStorage.removeItem(API_KEYS_STORAGE_KEY);
+}

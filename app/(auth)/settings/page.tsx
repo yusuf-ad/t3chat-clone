@@ -1,14 +1,10 @@
 import CustomButton from "@/components/custom-button";
 import ModeToggle from "@/components/mode-toggle";
 import ProfileCard from "@/components/settings/profile-card";
-import { SignOutButton } from "@clerk/nextjs";
 import { ArrowLeftIcon } from "lucide-react";
 import Link from "next/link";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import CustomizationTab from "@/components/settings/tabs/customization-tab";
-import ModelsTab from "@/components/settings/tabs/models-tab";
-import ApiKeysTab from "@/components/settings/tabs/apikeys-tab";
 import SettingsTabsContent from "@/components/settings/tabs/tabs-content";
+import CustomSignOutButton from "@/components/signout-button";
 
 export default async function SettingsPage() {
   return (
@@ -32,14 +28,7 @@ export default async function SettingsPage() {
         <div className="flex items-center gap-2">
           <ModeToggle className="bg-transparent" />
 
-          <SignOutButton>
-            <CustomButton
-              className="hover:bg-sidebar-border-light! h-auto w-auto bg-transparent"
-              variant="ghost"
-            >
-              Sign out
-            </CustomButton>
-          </SignOutButton>
+          <CustomSignOutButton />
         </div>
       </header>
 
