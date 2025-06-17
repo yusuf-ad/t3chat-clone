@@ -9,7 +9,12 @@ import {
 } from "@/server/actions/message";
 import { getLanguageModel, DEFAULT_MODEL } from "@/lib/ai/ai-providers";
 import { auth } from "@clerk/nextjs/server";
-import { appendClientMessage, appendResponseMessages, streamText } from "ai";
+import {
+  APICallError,
+  appendClientMessage,
+  appendResponseMessages,
+  streamText,
+} from "ai";
 import { NextResponse } from "next/server";
 import { RequestHints, systemPrompt } from "@/lib/ai/prompts";
 import { geolocation } from "@vercel/functions";
@@ -184,7 +189,15 @@ export async function POST(req: Request) {
 
     return result.toDataStreamResponse();
   } catch (error) {
-    console.error("error", error);
+    if (error instanceof APICallError) {
+      return NextResponse.json(
+        {
+          error: error.message,
+          status: error.statusCode,
+        },
+        { status: error.statusCode },
+      );
+    }
 
     return NextResponse.json(
       {
@@ -192,6 +205,7 @@ export async function POST(req: Request) {
           error instanceof Error
             ? error.message
             : "An unexpected error occurred. Please try again later.",
+        status: 500,
       },
       { status: 500 },
     );

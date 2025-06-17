@@ -8,6 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import CustomizationTab from "@/components/settings/tabs/customization-tab";
 import ModelsTab from "@/components/settings/tabs/models-tab";
 import ApiKeysTab from "@/components/settings/tabs/apikeys-tab";
+import SettingsTabsContent from "@/components/settings/tabs/tabs-content";
 
 export default async function SettingsPage() {
   return (
@@ -47,31 +48,7 @@ export default async function SettingsPage() {
           <ProfileCard />
         </div>
         <div className="md:w-3/4 md:pl-12">
-          <Tabs defaultValue="customization" className="w-auto">
-            <TabsList className="mb-6">
-              <TabsTrigger className="cursor-pointer" value="customization">
-                Customization
-              </TabsTrigger>
-              <TabsTrigger className="cursor-pointer" value="models">
-                Models
-              </TabsTrigger>
-              <TabsTrigger className="cursor-pointer" value="api-keys">
-                API Keys
-              </TabsTrigger>
-              <TabsTrigger className="cursor-pointer" value="contact-us">
-                Contact us
-              </TabsTrigger>
-            </TabsList>
-            <TabsContent value="customization">
-              <CustomizationTab />
-            </TabsContent>
-            <TabsContent value="models">
-              <ModelsTab />
-            </TabsContent>
-            <TabsContent value="api-keys">
-              <ApiKeysTab />
-            </TabsContent>
-          </Tabs>
+          <SettingsTabsContent />
         </div>
       </main>
     </div>

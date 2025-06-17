@@ -63,20 +63,38 @@ export default function ChatInterface({
     onError(error) {
       let errorMessage =
         "An unexpected error occurred. Please try again later.";
+
       try {
+        // error.message might contain the JSON response from the server
         const errorResponse = JSON.parse(error.message);
+
         if (errorResponse.error) {
           errorMessage = errorResponse.error;
         }
+
+        if (errorResponse.status === 401) {
+          errorMessage = "You need to provide your API key to continue.";
+
+          toast.error(errorMessage, {
+            action: {
+              label: "Go to settings",
+              onClick: () => {
+                router.push("/settings?tab=api-keys");
+              },
+            },
+          });
+        }
       } catch (e) {
+        // If parsing fails, use the error message directly
         console.error("Error parsing error response:", e);
+        errorMessage = error.message || errorMessage;
+
+        toast.error(errorMessage);
       }
 
       if (pathname === "/") {
         router.push(`/chat/${id}`);
       }
-
-      toast.error(errorMessage);
     },
   });
 
