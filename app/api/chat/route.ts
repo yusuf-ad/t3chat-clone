@@ -78,6 +78,8 @@ export async function POST(req: Request) {
       timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
     };
 
+    console.log("requestHints", requestHints);
+
     const [, saveMessagesError] = await attempt(async () => {
       return await saveMessages({
         messages: [
@@ -187,7 +189,12 @@ export async function POST(req: Request) {
     // even when the client response is aborted:
     result.consumeStream(); // no await
 
-    return result.toDataStreamResponse();
+    return result.toDataStreamResponse({
+      headers: {
+        "Transfer-Encoding": "chunked",
+        Connection: "keep-alive",
+      },
+    });
   } catch (error) {
     if (error instanceof APICallError) {
       return NextResponse.json(

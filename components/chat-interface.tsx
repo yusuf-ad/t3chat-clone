@@ -64,6 +64,7 @@ export default function ChatInterface({
     },
 
     onError(error) {
+      console.log("error", error);
       let errorMessage =
         "An unexpected error occurred. Please try again later.";
 
