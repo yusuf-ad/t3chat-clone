@@ -8,6 +8,27 @@ import { DBMessage } from "@/server/db/schema";
 import { auth } from "@clerk/nextjs/server";
 import { UIMessage } from "ai";
 
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
+
+  const [chat, chatError] = await attempt(getChatById({ id }));
+
+  if (chatError) {
+    return {
+      title: id,
+      description: "A chat clone built with Next.js, Shadcn, and Tailwind CSS",
+    };
+  }
+
+  return {
+    title: `${chat.title}`,
+  };
+}
+
 export default async function ChatPage({
   params,
 }: {
