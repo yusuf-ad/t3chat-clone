@@ -69,12 +69,8 @@ export default function ChatInterface({
       let action = null;
 
       try {
-        console.log(error);
-
         // error.message might contain the JSON response from the server
         const errorResponse = JSON.parse(error.message);
-
-        console.log("errorResponse", errorResponse);
 
         if (errorResponse.error) {
           errorMessage = errorResponse.error;

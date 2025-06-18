@@ -17,7 +17,7 @@ export async function generateMetadata({
 
   const [chat, chatError] = await attempt(getChatById({ id }));
 
-  if (chatError) {
+  if (chatError || !chat) {
     return {
       title: id,
       description: "A chat clone built with Next.js, Shadcn, and Tailwind CSS",
