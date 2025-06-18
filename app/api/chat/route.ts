@@ -42,9 +42,11 @@ export async function POST(req: Request) {
     }
 
     if (!chat) {
+      const selectedModel = model || DEFAULT_MODEL;
       const title = await generateTitleFromUserMessage({
         message,
         apiKeys,
+        model: selectedModel,
       });
 
       await createChat({

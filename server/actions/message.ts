@@ -11,15 +11,37 @@ import { getLanguageModel } from "@/lib/ai/ai-providers";
 export async function generateTitleFromUserMessage({
   message,
   apiKeys,
+  model,
 }: {
   message: UIMessage;
   apiKeys?: { openai?: string; openrouter?: string };
+  model?: string;
 }) {
-  // Use user's API key if available, otherwise fall back to default
-  const model = getLanguageModel("openai:gpt-4o-mini", apiKeys);
+  // Use the user's selected model for title generation if provided
+  // This ensures consistency - same model for chat and title generation
+  let modelId: string;
+
+  if (model) {
+    // User has selected a specific model, use that
+    modelId = model;
+  } else {
+    // Fallback to smart selection if no model specified:
+    // 1. If user has OpenRouter API key, use Claude 3.5 Sonnet
+    // 2. If user has OpenAI API key, use GPT-4o Mini
+    // 3. Otherwise fallback to Mistral (environment variables)
+    if (apiKeys?.openrouter) {
+      modelId = "openrouter:anthropic/claude-3.5-sonnet";
+    } else if (apiKeys?.openai) {
+      modelId = "openai:gpt-4o-mini";
+    } else {
+      modelId = "mistral:mistral-small-latest";
+    }
+  }
+
+  const languageModel = getLanguageModel(modelId, apiKeys);
 
   const { text: title } = await generateText({
-    model,
+    model: languageModel,
     system: `\n
       - you will generate a short title based on the first message a user begins a conversation with
       - ensure it is not more than 80 characters long
