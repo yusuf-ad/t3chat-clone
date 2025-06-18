@@ -5,36 +5,36 @@ import { useEffect, useRef } from "react";
 import { getStoredApiKeys, saveApiKeys } from "@/lib/api-keys";
 
 /**
- * Bu component kullanıcı çıkış yaptığında API keylerini temizler
- * Güvenlik için önemli - API keyleri hassas bilgilerdir
+ * This component cleans up API keys when the user signs out
+ * Important for security - API keys are sensitive information
  */
 export default function AuthCleanup() {
   const { isSignedIn, user } = useUser();
   const prevSignedInRef = useRef<boolean | null>(null);
 
   useEffect(() => {
-    // İlk render'da önceki durumu kaydet
+    // Save the previous state on first render
     if (prevSignedInRef.current === null) {
       prevSignedInRef.current = isSignedIn ?? null;
       return;
     }
 
-    // Kullanıcı çıkış yaptıysa (önceden giriş yapmıştı, şimdi yapmıyor)
+    // If user signed out (was previously signed in, now is not)
     if (prevSignedInRef.current === true && isSignedIn === false) {
-      console.log("Kullanıcı çıkış yaptı, API keyleri temizleniyor...");
+      console.log("User signed out, cleaning up API keys...");
 
-      // Tüm API keylerini temizle
+      // Clear all API keys
       const currentKeys = getStoredApiKeys();
       if (Object.keys(currentKeys).length > 0) {
-        saveApiKeys({}); // Boş obje ile tüm keyleri temizle
-        console.log("API keyleri başarıyla temizlendi");
+        saveApiKeys({}); // Clear all keys with empty object
+        console.log("API keys successfully cleared");
       }
     }
 
-    // Mevcut durumu kaydet
+    // Save current state
     prevSignedInRef.current = isSignedIn ?? null;
   }, [isSignedIn]);
 
-  // Bu component hiçbir şey render etmez, sadece cleanup işlevi görür
+  // This component renders nothing, it only serves as a cleanup function
   return null;
 }
