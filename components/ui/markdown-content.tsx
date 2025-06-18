@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 "use client";
 
 import { cn } from "@/lib/utils";
@@ -350,8 +352,10 @@ const components: Partial<Components> = {
   ),
   img: ({ alt, ...props }: React.ImgHTMLAttributes<HTMLImageElement>) => (
     // biome-ignore lint/a11y/useAltText: alt is not required
+    // eslint-disable-next-line @next/next/no-img-element
     <img className="rounded-md" alt={alt} {...props} />
   ),
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   code: ({ children, node, className, ...props }) => {
     const match = /language-(\w+)/.exec(className || "");
     if (match) {

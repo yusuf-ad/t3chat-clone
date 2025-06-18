@@ -1,7 +1,7 @@
 import { Message } from "ai";
 import { ChatBubble, ChatBubbleMessage } from "./ui/chat-bubble";
 import { MarkdownContent } from "./ui/markdown-content";
-import { Copy, Edit, RefreshCcw } from "lucide-react";
+import { Edit, RefreshCcw } from "lucide-react";
 import CustomButton from "./custom-button";
 import CopyButton from "./ui/copy-button";
 

@@ -1,4 +1,4 @@
-import { auth, currentUser, getAuth } from "@clerk/nextjs/server";
+import { auth, currentUser } from "@clerk/nextjs/server";
 import { Avatar, AvatarImage } from "./ui/avatar";
 import { LogIn } from "lucide-react";
 import Link from "next/link";

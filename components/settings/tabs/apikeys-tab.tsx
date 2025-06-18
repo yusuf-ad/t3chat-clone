@@ -4,17 +4,8 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { AnthropicIcon } from "@/components/ui/icons/anthropic-icon";
 import { TablerBrandOpenai } from "@/components/ui/icons/openai-icon";
-import {
-  Key,
-  Globe,
-  Eye,
-  EyeOff,
-  CheckCircle,
-  XCircle,
-  Trash,
-} from "lucide-react";
+import { Key, CheckCircle, XCircle, Trash } from "lucide-react";
 import {
   getStoredApiKeys,
   saveApiKey,
@@ -143,7 +134,7 @@ export default function ApiKeysTab() {
       toast.success(
         `${providerId.charAt(0).toUpperCase() + providerId.slice(1)} API key saved successfully!`,
       );
-    } catch (error) {
+    } catch {
       toast.error("Failed to save API key. Please try again.");
     }
   };
@@ -165,7 +156,7 @@ export default function ApiKeysTab() {
       toast.success(
         `${providerId.charAt(0).toUpperCase() + providerId.slice(1)} API key removed successfully!`,
       );
-    } catch (error) {
+    } catch {
       toast.error("Failed to remove API key. Please try again.");
     }
   };

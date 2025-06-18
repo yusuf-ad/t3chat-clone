@@ -50,8 +50,8 @@ export default function ModelsTab() {
           Available Models
         </h2>
         <p className="text-muted-foreground">
-          Choose which models appear in your model selector. This won't affect
-          existing conversations.
+          Choose which models appear in your model selector. This won&apos;t
+          affect existing conversations.
         </p>
       </div>
 

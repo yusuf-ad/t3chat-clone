@@ -9,7 +9,7 @@ import { getStoredApiKeys, saveApiKeys } from "@/lib/api-keys";
  * Important for security - API keys are sensitive information
  */
 export default function AuthCleanup() {
-  const { isSignedIn, user } = useUser();
+  const { isSignedIn } = useUser();
   const prevSignedInRef = useRef<boolean | null>(null);
 
   useEffect(() => {

@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { openai as originalOpenAI, createOpenAI } from "@ai-sdk/openai";
 import { anthropic as originalAnthropic } from "@ai-sdk/anthropic";
 import { mistral as originalMistral } from "@ai-sdk/mistral";

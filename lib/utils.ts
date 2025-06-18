@@ -1,5 +1,5 @@
 import { Chat } from "@/server/db/schema";
-import { CoreAssistantMessage, CoreToolMessage, UIMessage } from "ai";
+import { CoreAssistantMessage, CoreToolMessage } from "ai";
 import { clsx, type ClassValue } from "clsx";
 import { isToday, isYesterday, subMonths, subWeeks } from "date-fns";
 import { twMerge } from "tailwind-merge";

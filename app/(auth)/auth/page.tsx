@@ -32,7 +32,7 @@ export default function AuthPage() {
             <span className="font-bold text-purple-600">T3.chat</span>
           </h1>
           <p className="text-text-muted dark:text-muted-foreground mb-8 text-center">
-            Sign in below (we'll increase your message limits if you do{" "}
+            Sign in below (we&apos;ll increase your message limits if you do{" "}
             <span className="align-middle">😏</span>)
           </p>
           <div className="relative mb-6 w-full max-w-sm rounded-lg bg-gradient-to-r from-purple-600 via-purple-950 to-purple-700 p-[1px]">

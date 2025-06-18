@@ -2,7 +2,7 @@
 
 import { Key } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { getStoredApiKeys, hasValidApiKey } from "@/lib/api-keys";
+import { hasValidApiKey } from "@/lib/api-keys";
 import { useEffect, useState } from "react";
 import { useUser } from "@clerk/nextjs";
 
@@ -19,7 +19,6 @@ export default function ApiKeyIndicator({
   const [usingCustomKey, setUsingCustomKey] = useState(false);
 
   useEffect(() => {
-    // Kullanıcı çıkış yaptıysa indicator'ı gizle
     if (!isSignedIn) {
       setUsingCustomKey(false);
       return;

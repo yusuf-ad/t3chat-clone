@@ -33,8 +33,8 @@ export function DeleteChatDialog({
         <DialogHeader className="flex flex-col gap-4">
           <DialogTitle className="">Delete Thread</DialogTitle>
           <DialogDescription>
-            Are you sure you want to delete "{title}"? This action cannot be
-            undone.
+            Are you sure you want to delete &quot;{title}&quot;? This action
+            cannot be undone.
           </DialogDescription>
         </DialogHeader>
         <DialogFooter className="mt-4">

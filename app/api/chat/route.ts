@@ -176,8 +176,8 @@ export async function POST(req: Request) {
                 },
               ],
             });
-          } catch (_) {
-            console.error("Failed to save chat");
+          } catch (error) {
+            console.error("💥 Error in chat route", error);
           }
         }
       },
