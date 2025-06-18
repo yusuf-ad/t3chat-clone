@@ -145,4 +145,6 @@ export function hasValidApiKey(provider: ApiKeyProvider): boolean {
 export function clearAllApiKeys() {
   if (typeof window === "undefined") return;
   localStorage.removeItem(API_KEYS_STORAGE_KEY);
+
+  localStorage.removeItem("selectedModel");
 }

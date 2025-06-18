@@ -1,6 +1,12 @@
 "use client";
 
-import { createContext, useContext, useState, ReactNode } from "react";
+import {
+  createContext,
+  useContext,
+  useState,
+  ReactNode,
+  useEffect,
+} from "react";
 import { DEFAULT_MODEL } from "@/lib/ai/ai-providers";
 
 interface ModelContextType {
@@ -11,7 +17,20 @@ interface ModelContextType {
 const ModelContext = createContext<ModelContextType | undefined>(undefined);
 
 export function ModelProvider({ children }: { children: ReactNode }) {
-  const [selectedModel, setSelectedModel] = useState(DEFAULT_MODEL);
+  const [selectedModel, setSelectedModelState] = useState(DEFAULT_MODEL);
+
+  // İlk renderdan sonra localStorage'dan oku
+  useEffect(() => {
+    const stored = localStorage.getItem("selectedModel");
+    if (stored && stored !== selectedModel) {
+      setSelectedModelState(stored);
+    }
+  }, []);
+
+  const setSelectedModel = (model: string) => {
+    setSelectedModelState(model);
+    localStorage.setItem("selectedModel", model);
+  };
 
   return (
     <ModelContext.Provider value={{ selectedModel, setSelectedModel }}>
