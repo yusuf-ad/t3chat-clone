@@ -67,6 +67,7 @@ export default function ChatInterface({
       console.log("error", error);
       let errorMessage =
         "An unexpected error occurred. Please try again later.";
+      let action = null;
 
       try {
         // error.message might contain the JSON response from the server
@@ -76,21 +77,27 @@ export default function ChatInterface({
           errorMessage = errorResponse.error;
         }
 
-        if (errorResponse.status === 401) {
+        if (errorResponse.status === 401 || errorResponse.status === 400) {
           errorMessage = "You need to provide your API key to continue.";
-
-          toast.error(errorMessage, {
-            action: {
-              label: "Go to settings",
-              onClick: () => {
-                router.push("/settings?tab=api-keys");
-              },
+          action = {
+            label: "Go to settings",
+            onClick: () => {
+              router.push("/settings?tab=api-keys");
             },
-          });
+          };
+        }
+
+        if (errorResponse.status === 402) {
+          errorMessage = "You don't have enough credits to continue.";
+          action = {
+            label: "Go to settings",
+            onClick: () => {
+              router.push("/settings?tab=api-keys");
+            },
+          };
         }
       } catch (e) {
         // If parsing fails, use the error message directly
-        console.error("Error parsing error response:", e);
         errorMessage = error.message || errorMessage;
 
         toast.error(errorMessage);
@@ -101,6 +108,8 @@ export default function ChatInterface({
 
         router.refresh();
       }
+
+      toast.error(errorMessage, { action });
     },
   });
 

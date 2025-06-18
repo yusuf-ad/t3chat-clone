@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { TablerBrandOpenai } from "@/components/ui/icons/openai-icon";
-import { Key, CheckCircle, XCircle, Trash } from "lucide-react";
+import { Key, CheckCircle, XCircle, Trash, Globe } from "lucide-react";
 import {
   getStoredApiKeys,
   saveApiKey,
@@ -28,15 +28,32 @@ const API_PROVIDERS = [
     consoleLink: "https://platform.openai.com/api-keys",
     placeholder: "sk-...",
   },
+  {
+    id: "openrouter",
+    name: "OpenRouter API Key",
+    icon: <Globe className="h-5 w-5" />,
+    models: [
+      "Claude 3.5 Sonnet",
+      "GPT-4o via OpenRouter",
+      "Llama 3.1 405B",
+      "Gemini Pro 1.5",
+      "100+ More Models",
+    ],
+    consoleUrl: "OpenRouter's Dashboard",
+    consoleLink: "https://openrouter.ai/keys",
+    placeholder: "sk-or-...",
+  },
 ] as const;
 
 export default function ApiKeysTab() {
   const { isSignedIn } = useUser();
   const [apiKeys, setApiKeys] = useState<Record<string, string>>({
     openai: "",
+    openrouter: "",
   });
   const [showKeys, setShowKeys] = useState<Record<string, boolean>>({
     openai: false,
+    openrouter: false,
   });
   const [validationErrors, setValidationErrors] = useState<
     Record<string, string>
@@ -47,10 +64,10 @@ export default function ApiKeysTab() {
   useEffect(() => {
     if (!isSignedIn) {
       // Kullanıcı çıkış yaptıysa state'i temizle
-      setApiKeys({ openai: "" });
+      setApiKeys({ openai: "", openrouter: "" });
       setSavedKeys({});
       setValidationErrors({});
-      setShowKeys({ openai: false });
+      setShowKeys({ openai: false, openrouter: false });
       return;
     }
 

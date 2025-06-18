@@ -1,9 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { openai as originalOpenAI, createOpenAI } from "@ai-sdk/openai";
-import { anthropic as originalAnthropic } from "@ai-sdk/anthropic";
 import { mistral as originalMistral } from "@ai-sdk/mistral";
-import { google as originalGoogle } from "@ai-sdk/google";
+import { createOpenRouter } from "@openrouter/ai-sdk-provider";
 import { createProviderRegistry, customProvider } from "ai";
 
 // Model configuration types
@@ -47,32 +46,6 @@ export const MODELS: ModelConfig[] = [
     pricing: { input: 10, output: 30 },
   },
 
-  // Anthropic Models
-  {
-    id: "anthropic:claude-3-5-sonnet-20240620",
-    name: "Claude 3.5 Sonnet",
-    provider: "anthropic",
-    description: "Best balance of intelligence, speed, and cost",
-    contextWindow: 200000,
-    pricing: { input: 3, output: 15 },
-  },
-  {
-    id: "anthropic:claude-3-opus-20240229",
-    name: "Claude 3 Opus",
-    provider: "anthropic",
-    description: "Most capable model for complex tasks",
-    contextWindow: 200000,
-    pricing: { input: 15, output: 75 },
-  },
-  {
-    id: "anthropic:claude-3-haiku-20240307",
-    name: "Claude 3 Haiku",
-    provider: "anthropic",
-    description: "Fastest model for simple tasks",
-    contextWindow: 200000,
-    pricing: { input: 0.25, output: 1.25 },
-  },
-
   // Mistral Models
   {
     id: "mistral:mistral-large-latest",
@@ -91,20 +64,44 @@ export const MODELS: ModelConfig[] = [
     pricing: { input: 0.2, output: 0.6 },
   },
 
-  // Google Models
+  // OpenRouter Models (Popular ones)
   {
-    id: "google:gemini-1.5-pro-002",
-    name: "Gemini 1.5 Pro",
-    provider: "google",
-    description: "Google's most capable multimodal model",
+    id: "openrouter:anthropic/claude-3.5-sonnet",
+    name: "Claude 3.5 Sonnet (OpenRouter)",
+    provider: "openrouter",
+    description: "Anthropic's Claude via OpenRouter - flexible pricing",
+    contextWindow: 200000,
+    pricing: { input: 3, output: 15 },
+  },
+  {
+    id: "openrouter:openai/gpt-4o",
+    name: "GPT-4o (OpenRouter)",
+    provider: "openrouter",
+    description: "OpenAI's GPT-4o via OpenRouter - competitive pricing",
+    contextWindow: 128000,
+    pricing: { input: 2.5, output: 10 },
+  },
+  {
+    id: "openrouter:meta-llama/llama-3.1-405b-instruct",
+    name: "Llama 3.1 405B",
+    provider: "openrouter",
+    description: "Meta's largest open model via OpenRouter",
+    contextWindow: 131072,
+    pricing: { input: 3, output: 3 },
+  },
+  {
+    id: "openrouter:google/gemini-pro-1.5",
+    name: "Gemini Pro 1.5 (OpenRouter)",
+    provider: "openrouter",
+    description: "Google's Gemini via OpenRouter with flexible access",
     contextWindow: 2000000,
     pricing: { input: 1.25, output: 5 },
   },
   {
-    id: "google:gemini-1.5-flash-002",
-    name: "Gemini 1.5 Flash",
-    provider: "google",
-    description: "Fast and efficient multimodal model",
+    id: "openrouter:google/gemini-flash-1.5",
+    name: "Gemini Flash 1.5 (OpenRouter)",
+    provider: "openrouter",
+    description: "Google's fast Gemini model via OpenRouter",
     contextWindow: 1000000,
     pricing: { input: 0.075, output: 0.3 },
   },
@@ -131,22 +128,6 @@ export const openai = customProvider({
   fallbackProvider: originalOpenAI,
 });
 
-export const anthropic = customProvider({
-  languageModels: {
-    "claude-3-5-sonnet-20240620": originalAnthropic(
-      "claude-3-5-sonnet-20240620",
-    ),
-    "claude-3-opus-20240229": originalAnthropic("claude-3-opus-20240229"),
-    "claude-3-haiku-20240307": originalAnthropic("claude-3-haiku-20240307"),
-    // Aliases
-    sonnet: originalAnthropic("claude-3-5-sonnet-20240620"),
-    opus: originalAnthropic("claude-3-opus-20240229"),
-    haiku: originalAnthropic("claude-3-haiku-20240307"),
-    best: originalAnthropic("claude-3-5-sonnet-20240620"),
-  },
-  fallbackProvider: originalAnthropic,
-});
-
 export const mistral = customProvider({
   languageModels: {
     "mistral-large-latest": originalMistral("mistral-large-latest"),
@@ -158,24 +139,12 @@ export const mistral = customProvider({
   fallbackProvider: originalMistral,
 });
 
-export const google = customProvider({
-  languageModels: {
-    "gemini-1.5-pro-002": originalGoogle("gemini-1.5-pro-002"),
-    "gemini-1.5-flash-002": originalGoogle("gemini-1.5-flash-002"),
-    // Aliases
-    pro: originalGoogle("gemini-1.5-pro-002"),
-    flash: originalGoogle("gemini-1.5-flash-002"),
-  },
-  fallbackProvider: originalGoogle,
-});
-
-// Provider registry
+// Provider registry - Only Mistral uses environment variable
+// OpenAI: BYOK (not in registry - only custom provider)
+// OpenRouter: BYOK (not in registry - only custom provider)
 export const registry = createProviderRegistry(
   {
-    openai,
-    anthropic,
     mistral,
-    google,
   },
   { separator: ":" },
 );
@@ -224,16 +193,32 @@ export function createCustomOpenAIProvider(apiKey: string) {
   });
 }
 
+// Create custom OpenRouter provider with user's API key
+export function createCustomOpenRouterProvider(apiKey: string) {
+  return createOpenRouter({
+    apiKey: apiKey,
+  });
+}
+
 // Get language model from registry or custom provider
 export function getLanguageModel(
   modelId: string,
-  customApiKeys?: { openai?: string },
+  customApiKeys?: { openai?: string; openrouter?: string },
 ) {
   // If user provided OpenAI API key and is using OpenAI model, use custom provider
   if (customApiKeys?.openai && modelId.startsWith("openai:")) {
     const customProvider = createCustomOpenAIProvider(customApiKeys.openai);
     const modelName = modelId.replace("openai:", "");
     return customProvider.languageModel(modelName as any);
+  }
+
+  // If user provided OpenRouter API key and is using OpenRouter model, use custom provider
+  if (customApiKeys?.openrouter && modelId.startsWith("openrouter:")) {
+    const openrouterProvider = createCustomOpenRouterProvider(
+      customApiKeys.openrouter,
+    );
+    const modelName = modelId.replace("openrouter:", "");
+    return openrouterProvider.chat(modelName as any);
   }
 
   // Otherwise use the default registry

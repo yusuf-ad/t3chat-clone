@@ -27,6 +27,8 @@ export default function ApiKeyIndicator({
     // Check if user has a custom API key for the current model's provider
     if (modelId.startsWith("openai:")) {
       setUsingCustomKey(hasValidApiKey("openai"));
+    } else if (modelId.startsWith("openrouter:")) {
+      setUsingCustomKey(hasValidApiKey("openrouter"));
     } else {
       setUsingCustomKey(false);
     }

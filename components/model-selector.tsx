@@ -17,6 +17,7 @@ import { TablerBrandOpenai } from "./ui/icons/openai-icon";
 import { LogosMistralAiIcon } from "./ui/icons/mistral-icon";
 import { AnthropicIcon } from "./ui/icons/anthropic-icon";
 import { GoogleIcon } from "./ui/icons/google-icon";
+import { Globe } from "lucide-react";
 import { useModel } from "@/contexts/model-context";
 import {
   getModelById,
@@ -25,6 +26,7 @@ import {
 } from "@/lib/ai/ai-providers";
 import { ModelInfo } from "./model-info";
 import ApiKeyIndicator from "./api-key-indicator";
+import OpenRouterIcon from "./ui/icons/openrouter-icon";
 
 // Provider icon mapping
 const providerIcons: Record<
@@ -35,6 +37,7 @@ const providerIcons: Record<
   anthropic: AnthropicIcon,
   mistral: LogosMistralAiIcon,
   google: GoogleIcon,
+  openrouter: OpenRouterIcon,
 };
 
 export function ModelSelector({

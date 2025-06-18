@@ -1,6 +1,5 @@
 "use server";
 
-import { openai } from "@ai-sdk/openai";
 import { generateText, UIMessage } from "ai";
 import { db } from "../db";
 import { DBMessage, message } from "../db/schema";
@@ -14,7 +13,7 @@ export async function generateTitleFromUserMessage({
   apiKeys,
 }: {
   message: UIMessage;
-  apiKeys?: { openai?: string };
+  apiKeys?: { openai?: string; openrouter?: string };
 }) {
   // Use user's API key if available, otherwise fall back to default
   const model = getLanguageModel("openai:gpt-4o-mini", apiKeys);

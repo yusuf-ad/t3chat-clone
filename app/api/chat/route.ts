@@ -13,6 +13,7 @@ import {
   APICallError,
   appendClientMessage,
   appendResponseMessages,
+  NoSuchProviderError,
   streamText,
 } from "ai";
 import { NextResponse } from "next/server";
@@ -78,8 +79,6 @@ export async function POST(req: Request) {
       timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
     };
 
-    console.log("requestHints", requestHints);
-
     const [, saveMessagesError] = await attempt(async () => {
       return await saveMessages({
         messages: [
@@ -110,7 +109,8 @@ export async function POST(req: Request) {
       experimental_generateMessageId: generateUUID,
 
       async onError({ error }) {
-        console.log("💥 Error in chat route", error);
+        console.log("error in onerror", error);
+
         if (error instanceof Error) {
           // use this function to save the messages that are immediately stopped by the user
           if (error.name === "ResponseAborted") {
@@ -196,6 +196,26 @@ export async function POST(req: Request) {
       },
     });
   } catch (error) {
+    if (error instanceof APICallError) {
+      return NextResponse.json(
+        {
+          error: error.message,
+          status: error.statusCode,
+        },
+        { status: error.statusCode },
+      );
+    }
+
+    if (error instanceof NoSuchProviderError) {
+      return NextResponse.json(
+        {
+          error: "No such provider. Please check your API keys.",
+          status: 400,
+        },
+        { status: 400 },
+      );
+    }
+
     if (error instanceof APICallError) {
       return NextResponse.json(
         {
