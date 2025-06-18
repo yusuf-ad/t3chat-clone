@@ -5,7 +5,7 @@ import { attempt } from "@/lib/try-catch";
 import type { UIMessage } from "ai";
 import { db } from "../db";
 import { chat } from "../db/schema";
-import { eq } from "drizzle-orm";
+import { eq, not } from "drizzle-orm";
 import { ChatSDKError } from "@/lib/errors";
 import { saveMessages } from "./message";
 import { revalidateTag, unstable_cache } from "next/cache";
@@ -124,3 +124,20 @@ export const getChatHistory = unstable_cache(
     tags: ["chat-history"],
   },
 );
+
+export async function toggleChatPin({ id }: { id: string }) {
+  const [data, error] = await attempt(async () => {
+    await db
+      .update(chat)
+      .set({ pinned: not(chat.pinned) })
+      .where(eq(chat.id, id));
+  });
+
+  if (error) {
+    throw new ChatSDKError("bad_request:database", "Failed to pin chat");
+  }
+
+  revalidateTag("chat-history");
+
+  return data;
+}

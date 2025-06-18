@@ -6,6 +6,7 @@ import {
   json,
   uuid,
   text,
+  boolean,
 } from "drizzle-orm/pg-core";
 
 export const chat = pgTable("Chat", {
@@ -14,6 +15,7 @@ export const chat = pgTable("Chat", {
   title: text("title").notNull(),
   // the userId column will be used to store the Clerk user ID
   userId: text("userId").notNull(),
+  pinned: boolean("pinned").notNull().default(false),
 });
 
 export type Chat = InferSelectModel<typeof chat>;
