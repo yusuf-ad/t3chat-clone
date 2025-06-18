@@ -101,13 +101,6 @@ export default function ApiKeysTab() {
     }));
   };
 
-  const toggleKeyVisibility = (providerId: string) => {
-    setShowKeys((prev) => ({
-      ...prev,
-      [providerId]: !prev[providerId],
-    }));
-  };
-
   const handleSave = async (providerId: string) => {
     const apiKey = apiKeys[providerId];
 
@@ -189,7 +182,7 @@ export default function ApiKeysTab() {
       </div>
 
       {/* API Key Sections */}
-      <div className="space-y-4">
+      <form className="space-y-4">
         {API_PROVIDERS.map((provider) => (
           <div key={provider.id} className="space-y-4 rounded-lg border p-6">
             {/* Provider Header */}
@@ -289,15 +282,6 @@ export default function ApiKeysTab() {
 
             {/* Action Buttons */}
             <div className="flex justify-end gap-2">
-              {savedKeys[provider.id] && (
-                <Button
-                  onClick={() => handleRemove(provider.id)}
-                  variant="outline"
-                  className="px-4"
-                >
-                  Remove
-                </Button>
-              )}
               <Button
                 onClick={() => handleSave(provider.id)}
                 className="bg-interactive-primary hover:bg-interactive-primary-hover px-6 text-white"
@@ -310,7 +294,7 @@ export default function ApiKeysTab() {
             </div>
           </div>
         ))}
-      </div>
+      </form>
     </div>
   );
 }

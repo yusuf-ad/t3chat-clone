@@ -13,6 +13,8 @@ export default function ChatList({ chats }: { chats: Chat[] }) {
   const pinnedChats = chats.filter((chat) => chat.pinned);
   const unpinnedChats = chats.filter((chat) => !chat.pinned);
 
+  console.log(pinnedChats.length, unpinnedChats.length, chats.length);
+
   const [optimisticChatHistory, setOptimisticChatHistory] = useOptimistic(
     unpinnedChats,
     (
@@ -94,7 +96,7 @@ export default function ChatList({ chats }: { chats: Chat[] }) {
   return (
     <>
       {optimisticPinnedChats.length > 0 && (
-        <div>
+        <div className="pb-2">
           <h3 className="text-sidebar-heading pb-2 text-xs font-semibold tracking-widest uppercase">
             Pinned
           </h3>
