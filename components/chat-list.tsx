@@ -13,8 +13,6 @@ export default function ChatList({ chats }: { chats: Chat[] }) {
   const pinnedChats = chats.filter((chat) => chat.pinned);
   const unpinnedChats = chats.filter((chat) => !chat.pinned);
 
-  console.log(pinnedChats.length, unpinnedChats.length, chats.length);
-
   const [optimisticChatHistory, setOptimisticChatHistory] = useOptimistic(
     unpinnedChats,
     (

@@ -177,7 +177,7 @@ export default function ChatInterface({
     });
 
     if (error) {
-      console.log("Error saving chat on stop:", error);
+      toast.error("Error saving chat on stop");
     }
 
     if (pathname === "/") {

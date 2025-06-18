@@ -16,8 +16,9 @@ import {
 import ReactMarkdown, { type Components } from "react-markdown";
 import remarkGfm from "remark-gfm";
 
+// for light mode use custom sidebar background color
 const DEFAULT_PRE_BLOCK_CLASS =
-  "my-4 overflow-x-auto w-fit rounded-xl bg-zinc-950 text-zinc-50 dark:bg-zinc-900 border border-border p-4";
+  "my-4 overflow-x-auto w-fit rounded-xl bg-sidebar dark:bg-interactive-ghost-hover! text-zinc-50 dark:bg-zinc-900 border border-border p-4";
 
 interface ReactElementWithChildren extends React.ReactElement {
   props: {
@@ -128,7 +129,7 @@ const HighlightedPre = memo(
           const { tokens } = await codeToTokens(code, {
             lang: language as keyof typeof bundledLanguages,
             themes: {
-              light: "github-dark",
+              light: "github-light",
               dark: "github-dark",
             },
           });
