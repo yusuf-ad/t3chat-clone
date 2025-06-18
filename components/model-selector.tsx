@@ -12,7 +12,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ChevronDownIcon, SparklesIcon } from "lucide-react";
+import { ChevronDownIcon, Key, SparklesIcon } from "lucide-react";
 import { TablerBrandOpenai } from "./ui/icons/openai-icon";
 import { LogosMistralAiIcon } from "./ui/icons/mistral-icon";
 import { AnthropicIcon } from "./ui/icons/anthropic-icon";
@@ -27,6 +27,10 @@ import {
 import { ModelInfo } from "./model-info";
 import ApiKeyIndicator from "./api-key-indicator";
 import OpenRouterIcon from "./ui/icons/openrouter-icon";
+import { MaterialSymbolsDiamondOutline } from "./ui/icons/diamond-icon";
+import { hasValidApiKey } from "@/lib/api-keys";
+import Link from "next/link";
+import CustomButton from "./custom-button";
 
 // Provider icon mapping
 const providerIcons: Record<
@@ -80,6 +84,12 @@ export function ModelSelector({
               <DropdownMenuLabel className="text-muted-foreground flex items-center gap-2 text-xs font-semibold tracking-wider uppercase">
                 <ProviderIcon className="h-4 w-4" />
                 {provider}
+                {provider === "openai" && !hasValidApiKey("openai") && (
+                  <p className="text-xs text-red-500">API Key Required</p>
+                )}
+                {provider === "openrouter" && !hasValidApiKey("openrouter") && (
+                  <p className="text-xs text-red-500">API Key Required</p>
+                )}
               </DropdownMenuLabel>
               <DropdownMenuGroup>
                 {models.map((model) => (
@@ -90,21 +100,23 @@ export function ModelSelector({
                   >
                     <div className="flex w-full items-center justify-between">
                       <div className="flex items-center gap-2">
-                        <ProviderIcon className="h-4 w-4" />
+                        <ProviderIcon className="h-3 w-3" />
                         <div className="flex items-center gap-2">
-                          <span className="text-sm font-medium">
+                          <span className="w-auto truncate text-sm font-medium">
                             {model.name}
                           </span>
-                          <ModelInfo modelInfo={model.description} />
+                          <div className="flex items-center gap-1">
+                            {model.isPremium && (
+                              <CustomButton
+                                description="Premium model"
+                                className="h-min w-min bg-transparent px-0! py-0!"
+                              >
+                                <MaterialSymbolsDiamondOutline className="text-yellow-500" />
+                              </CustomButton>
+                            )}
+                            <ModelInfo modelInfo={model.description} />
+                          </div>
                         </div>
-                      </div>
-                      <div className="text-muted-foreground flex flex-col items-end text-xs">
-                        <span>
-                          ${model.pricing.input}/$${model.pricing.output}
-                        </span>
-                        <span>
-                          {(model.contextWindow / 1000).toFixed(0)}K ctx
-                        </span>
                       </div>
                     </div>
                   </DropdownMenuItem>
@@ -118,9 +130,14 @@ export function ModelSelector({
         })}
 
         <DropdownMenuSeparator />
-        <DropdownMenuLabel className="flex items-center gap-2 text-xs">
-          <SparklesIcon className="h-3 w-3" />
-          Pricing per 1M tokens (input/output)
+        <DropdownMenuLabel>
+          <Link
+            className="flex items-center gap-2 text-xs hover:underline"
+            href="/settings?tab=api-keys"
+          >
+            <Key className="h-3 w-3" />
+            Enter your API keys to unlock premium models
+          </Link>
         </DropdownMenuLabel>
       </DropdownMenuContent>
     </DropdownMenu>

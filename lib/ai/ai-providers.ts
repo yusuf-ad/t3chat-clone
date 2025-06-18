@@ -16,6 +16,7 @@ export type ModelConfig = {
     input: number; // per 1M tokens
     output: number; // per 1M tokens
   };
+  isPremium: boolean;
 };
 
 // Available models configuration
@@ -28,6 +29,7 @@ export const MODELS: ModelConfig[] = [
     description: "OpenAI's flagship model, versatile and powerful",
     contextWindow: 128000,
     pricing: { input: 2.5, output: 10 },
+    isPremium: true,
   },
   {
     id: "openai:gpt-4o-mini",
@@ -36,6 +38,7 @@ export const MODELS: ModelConfig[] = [
     description: "Faster, cost-effective GPT-4o variant",
     contextWindow: 128000,
     pricing: { input: 0.15, output: 0.6 },
+    isPremium: true,
   },
   {
     id: "openai:gpt-4-turbo",
@@ -44,6 +47,7 @@ export const MODELS: ModelConfig[] = [
     description: "High-performance model with latest knowledge",
     contextWindow: 128000,
     pricing: { input: 10, output: 30 },
+    isPremium: true,
   },
 
   // Mistral Models
@@ -54,6 +58,7 @@ export const MODELS: ModelConfig[] = [
     description: "Flagship model for complex reasoning",
     contextWindow: 128000,
     pricing: { input: 2, output: 6 },
+    isPremium: false,
   },
   {
     id: "mistral:mistral-small-latest",
@@ -62,6 +67,7 @@ export const MODELS: ModelConfig[] = [
     description: "Cost-effective model for simple tasks",
     contextWindow: 128000,
     pricing: { input: 0.2, output: 0.6 },
+    isPremium: false,
   },
 
   // OpenRouter Models (Popular ones)
@@ -72,6 +78,7 @@ export const MODELS: ModelConfig[] = [
     description: "Anthropic's Claude via OpenRouter - flexible pricing",
     contextWindow: 200000,
     pricing: { input: 3, output: 15 },
+    isPremium: true,
   },
   {
     id: "openrouter:openai/gpt-4o",
@@ -80,6 +87,7 @@ export const MODELS: ModelConfig[] = [
     description: "OpenAI's GPT-4o via OpenRouter - competitive pricing",
     contextWindow: 128000,
     pricing: { input: 2.5, output: 10 },
+    isPremium: true,
   },
   {
     id: "openrouter:meta-llama/llama-3.1-405b-instruct",
@@ -88,6 +96,7 @@ export const MODELS: ModelConfig[] = [
     description: "Meta's largest open model via OpenRouter",
     contextWindow: 131072,
     pricing: { input: 3, output: 3 },
+    isPremium: true,
   },
   {
     id: "openrouter:google/gemini-pro-1.5",
@@ -96,6 +105,7 @@ export const MODELS: ModelConfig[] = [
     description: "Google's Gemini via OpenRouter with flexible access",
     contextWindow: 2000000,
     pricing: { input: 1.25, output: 5 },
+    isPremium: true,
   },
   {
     id: "openrouter:google/gemini-flash-1.5",
@@ -104,6 +114,7 @@ export const MODELS: ModelConfig[] = [
     description: "Google's fast Gemini model via OpenRouter",
     contextWindow: 1000000,
     pricing: { input: 0.075, output: 0.3 },
+    isPremium: true,
   },
 ];
 
