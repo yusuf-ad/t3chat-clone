@@ -83,14 +83,14 @@ export default function ChatWelcome({
         How can I help you{userName ? `, ${userName}` : ""}?
       </h2>
 
-      <div className="my-8 flex w-full gap-4">
+      <div className="my-8 flex w-full flex-col gap-4 sm:flex-row">
         {actions.map((action) => (
           <Button
             className={`${
               selectedAction === action.name
                 ? "bg-sidebar-button hover:bg-sidebar-button-hover dark:text-white"
                 : "bg-interactive-secondary text-interactive-secondary-text hover:bg-interactive-secondary-hover hover:text-interactive-secondary-text"
-            } flex-1 cursor-pointer border-0 py-6 font-semibold`}
+            } cursor-pointer border-0 py-6 font-semibold sm:flex-1`}
             key={action.name}
             onClick={() => handleActionClick(action.name)}
           >
@@ -100,7 +100,7 @@ export default function ChatWelcome({
         ))}
       </div>
 
-      <div className="mt-4 flex w-full flex-col gap-2">
+      <div className="mt-4 mb-8 flex w-full flex-col gap-2">
         {(selectedAction
           ? actionQuestions[selectedAction as keyof typeof actionQuestions]
           : questions
@@ -113,7 +113,7 @@ export default function ChatWelcome({
               className="text-interactive-ghost-text hover:bg-interactive-secondary-hover hover:text-interactive-secondary-text flex w-full cursor-pointer items-center justify-start bg-transparent py-5 font-semibold tracking-wide shadow-none"
               onClick={() => onQuestionClick?.(question)}
             >
-              {question}
+              <p className="text-left text-wrap">{question}</p>
             </Button>
           </div>
         ))}
