@@ -58,6 +58,8 @@ export default function ChatInterface({
     onFinish() {
       if (pathname === "/") {
         router.push(`/chat/${id}`);
+        // TODO: remove this when you find a better way to sync with the server when you create a new chat
+        router.refresh();
       }
     },
 
@@ -95,6 +97,8 @@ export default function ChatInterface({
 
       if (pathname === "/") {
         router.push(`/chat/${id}`);
+
+        router.refresh();
       }
     },
   });
@@ -178,6 +182,8 @@ export default function ChatInterface({
 
     if (pathname === "/") {
       router.push(`/chat/${id}`);
+
+      router.refresh();
     }
   };
 
