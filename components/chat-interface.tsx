@@ -64,14 +64,17 @@ export default function ChatInterface({
     },
 
     onError(error) {
-      console.log("error", error);
       let errorMessage =
         "An unexpected error occurred. Please try again later.";
       let action = null;
 
       try {
+        console.log(error);
+
         // error.message might contain the JSON response from the server
         const errorResponse = JSON.parse(error.message);
+
+        console.log("errorResponse", errorResponse);
 
         if (errorResponse.error) {
           errorMessage = errorResponse.error;
@@ -99,6 +102,16 @@ export default function ChatInterface({
       } catch (e) {
         // If parsing fails, use the error message directly
         errorMessage = error.message || errorMessage;
+
+        if (error.message.split("-")[1] === "402") {
+          errorMessage = "You don't have enough credits to continue.";
+          action = {
+            label: "Go to settings",
+            onClick: () => {
+              router.push("/settings?tab=api-keys");
+            },
+          };
+        }
 
         toast.error(errorMessage);
       }

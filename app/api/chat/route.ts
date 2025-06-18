@@ -101,6 +101,11 @@ export async function POST(req: Request) {
     const selectedModel = model || DEFAULT_MODEL;
     const languageModel = getLanguageModel(selectedModel, apiKeys);
 
+    let errorMessage = {
+      error: "An unexpected error occurred. Please try again later.",
+      status: 500,
+    };
+
     const result = streamText({
       model: languageModel,
       messages,
@@ -109,7 +114,12 @@ export async function POST(req: Request) {
       experimental_generateMessageId: generateUUID,
 
       async onError({ error }) {
-        console.log("error in onerror", error);
+        if (error instanceof APICallError) {
+          errorMessage = {
+            error: error.message,
+            status: error.statusCode || 500,
+          };
+        }
 
         if (error instanceof Error) {
           // use this function to save the messages that are immediately stopped by the user
@@ -190,9 +200,8 @@ export async function POST(req: Request) {
     result.consumeStream(); // no await
 
     return result.toDataStreamResponse({
-      headers: {
-        "Transfer-Encoding": "chunked",
-        Connection: "keep-alive",
+      getErrorMessage() {
+        return errorMessage.error + "-" + errorMessage.status;
       },
     });
   } catch (error) {
