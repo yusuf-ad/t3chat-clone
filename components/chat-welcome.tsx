@@ -100,7 +100,7 @@ export default function ChatWelcome({
         ))}
       </div>
 
-      <div className="mt-4 mb-8 flex w-full flex-col gap-2">
+      <div className="mb-4 flex w-full flex-col gap-2">
         {(selectedAction
           ? actionQuestions[selectedAction as keyof typeof actionQuestions]
           : questions

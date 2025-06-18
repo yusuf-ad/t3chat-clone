@@ -12,12 +12,11 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ChevronDownIcon, Key, SparklesIcon } from "lucide-react";
+import { ChevronDownIcon, Key } from "lucide-react";
 import { TablerBrandOpenai } from "./ui/icons/openai-icon";
 import { LogosMistralAiIcon } from "./ui/icons/mistral-icon";
 import { AnthropicIcon } from "./ui/icons/anthropic-icon";
 import { GoogleIcon } from "./ui/icons/google-icon";
-import { Globe } from "lucide-react";
 import { useModel } from "@/contexts/model-context";
 import {
   getModelById,

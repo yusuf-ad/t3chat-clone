@@ -99,7 +99,7 @@ export default function ChatInterface({
             },
           };
         }
-      } catch (e) {
+      } catch {
         // If parsing fails, use the error message directly
         errorMessage = error.message || errorMessage;
 
