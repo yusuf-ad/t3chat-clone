@@ -3,26 +3,34 @@
 import { ChatBubble, ChatBubbleMessage } from "./ui/chat-bubble";
 import { Textarea } from "./ui/textarea";
 import CustomButton from "./custom-button";
-import { Check, Edit, RefreshCcw, X } from "lucide-react";
+import { Edit, RefreshCcw } from "lucide-react";
 import CopyButton from "./ui/copy-button";
 import { useState, useRef, useEffect } from "react";
+import { Message, UseChatHelpers } from "@ai-sdk/react";
+import { deleteTrailingMessages } from "@/server/actions/message";
+import { attempt } from "@/lib/try-catch";
+import { toast } from "sonner";
 
 export default function EditMessage({
   initialText,
   setMode,
-  onSave,
+  setMessages,
+  reload,
+  message,
 }: {
   initialText: string;
   setMode: (mode: "view" | "edit") => void;
-  onSave?: (newText: string) => void;
+  setMessages: UseChatHelpers["setMessages"];
+  reload: UseChatHelpers["reload"];
+  message: Message;
 }) {
-  const [text, setText] = useState(initialText);
+  const [draftContent, setDraftContent] = useState(initialText);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
     if (textareaRef.current) {
       // Add a space to the end of the text if it doesn't already end with one
-      setText((prev) => {
+      setDraftContent((prev) => {
         if (!prev.endsWith(" ")) return prev + " ";
         return prev;
       });
@@ -34,15 +42,8 @@ export default function EditMessage({
     }
   }, [initialText]);
 
-  const handleSave = () => {
-    if (onSave) {
-      onSave(text.trim());
-    }
-    setMode("view");
-  };
-
   const handleCancel = () => {
-    setText(initialText); // Reset to original text
+    setDraftContent(initialText); // Reset to original text
 
     setMode("view");
   };
@@ -50,12 +51,42 @@ export default function EditMessage({
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "Enter") {
       e.preventDefault();
-      handleSave();
+      handleEditMessage();
     }
     if (e.key === "Escape") {
       e.preventDefault();
       handleCancel();
     }
+  };
+
+  const handleEditMessage = async () => {
+    const [, errorDeleteTrailingMessage] = await attempt(async () => {
+      await deleteTrailingMessages({ id: message.id });
+    });
+
+    if (errorDeleteTrailingMessage) {
+      toast.error(errorDeleteTrailingMessage.message);
+    }
+
+    // @ts-expect-error todo: support UIMessage in setMessages
+    setMessages((messages) => {
+      const index = messages.findIndex((m) => m.id === message.id);
+
+      if (index !== -1) {
+        const updatedMessage = {
+          ...message,
+          content: "",
+          parts: [{ type: "text", text: draftContent }],
+        };
+
+        return [...messages.slice(0, index), updatedMessage];
+      }
+
+      return messages;
+    });
+
+    setMode("view");
+    reload();
   };
 
   return (
@@ -67,9 +98,9 @@ export default function EditMessage({
         <Textarea
           ref={textareaRef}
           className="text-chat-text border-sidebar-border/25 focus-visible:border-sidebar-border min-h-min w-full resize-none border-4 bg-purple-50 px-4 py-3 break-words focus-visible:ring-0 focus-visible:outline-0"
-          value={text}
+          value={draftContent}
           autoFocus
-          onChange={(e) => setText(e.target.value)}
+          onChange={(e) => setDraftContent(e.target.value)}
           onKeyDown={handleKeyDown}
           placeholder="Edit your message..."
         />
@@ -86,7 +117,7 @@ export default function EditMessage({
         >
           <Edit />
         </CustomButton>
-        <CopyButton value={text} />
+        <CopyButton value={initialText} />
       </div>
     </ChatBubble>
   );

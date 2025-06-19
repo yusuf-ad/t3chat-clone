@@ -3,7 +3,7 @@
 import { generateText, UIMessage } from "ai";
 import { db } from "../db";
 import { DBMessage, message } from "../db/schema";
-import { asc, eq } from "drizzle-orm";
+import { and, asc, eq, gt } from "drizzle-orm";
 import { ChatSDKError } from "@/lib/errors";
 import { attempt } from "@/lib/try-catch";
 import { getLanguageModel } from "@/lib/ai/ai-providers";
@@ -81,4 +81,43 @@ export async function saveMessages({
   if (error) {
     throw new ChatSDKError("bad_request:database", "Failed to save messages");
   }
+}
+
+export async function getMessageById({ id }: { id: string }) {
+  const [data, error] = await attempt(async () => {
+    return db.select().from(message).where(eq(message.id, id));
+  });
+
+  if (error) {
+    throw new ChatSDKError("bad_request:database", "Failed to get message");
+  }
+
+  return data;
+}
+
+export async function deleteMessagesByChatIdAfterTimestamp({
+  chatId,
+  timestamp,
+}: {
+  chatId: string;
+  timestamp: Date;
+}) {
+  const [, error] = await attempt(async () => {
+    return db
+      .delete(message)
+      .where(and(eq(message.chatId, chatId), gt(message.createdAt, timestamp)));
+  });
+
+  if (error) {
+    throw new ChatSDKError("bad_request:database", "Failed to delete messages");
+  }
+}
+
+export async function deleteTrailingMessages({ id }: { id: string }) {
+  const [message] = await getMessageById({ id });
+
+  await deleteMessagesByChatIdAfterTimestamp({
+    chatId: message.chatId,
+    timestamp: message.createdAt,
+  });
 }

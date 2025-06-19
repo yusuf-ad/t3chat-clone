@@ -8,25 +8,24 @@ import CustomButton from "./custom-button";
 import CopyButton from "./ui/copy-button";
 import { useState } from "react";
 import EditMessage from "./edit-message";
+import { UseChatHelpers } from "@ai-sdk/react";
 
 export default function ChatMessage({
   message,
   onEditMessage,
+  setMessages,
+  reload,
 }: {
   message: Message;
   onEditMessage?: (messageId: string, newContent: string) => void;
+  setMessages: UseChatHelpers["setMessages"];
+  reload: UseChatHelpers["reload"];
 }) {
   const isUser = message.role === "user";
   const [mode, setMode] = useState<"view" | "edit">("view");
 
   const handleSetMode = (mode: "view" | "edit") => {
     setMode(mode);
-  };
-
-  const handleSaveEdit = (newContent: string) => {
-    if (onEditMessage) {
-      onEditMessage(message.id, newContent);
-    }
   };
 
   return (
@@ -73,7 +72,9 @@ export default function ChatMessage({
                   <EditMessage
                     initialText={part.text}
                     setMode={handleSetMode}
-                    onSave={handleSaveEdit}
+                    setMessages={setMessages}
+                    reload={reload}
+                    message={message}
                   />
                 )}
               </div>
@@ -126,7 +127,7 @@ export default function ChatMessage({
                       ) {
                         return (
                           <p
-                            className="ml-1 text-xs"
+                            className="text-sidebar-logo ml-1 text-xs font-semibold"
                             key={`annotation-${index}`}
                           >
                             {annotation.modelId as string}
