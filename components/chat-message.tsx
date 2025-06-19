@@ -1,12 +1,17 @@
+"use client";
+
 import { Message } from "ai";
 import { ChatBubble, ChatBubbleMessage } from "./ui/chat-bubble";
 import { MarkdownContent } from "./ui/markdown-content";
 import { Edit, RefreshCcw } from "lucide-react";
 import CustomButton from "./custom-button";
 import CopyButton from "./ui/copy-button";
+import { useState } from "react";
+import { Textarea } from "./ui/textarea";
 
 export default function ChatMessage({ message }: { message: Message }) {
   const isUser = message.role === "user";
+  const [mode, setMode] = useState<"view" | "edit">("view");
 
   return (
     <>
@@ -17,35 +22,69 @@ export default function ChatMessage({ message }: { message: Message }) {
         if (type === "text") {
           if (isUser) {
             return (
-              <ChatBubble
-                className="max-w-[80%] justify-self-end break-words"
-                key={key}
-                variant="sent"
-              >
-                <div className="group flex flex-col items-end gap-1">
-                  <ChatBubbleMessage
-                    className="bg-chat-user-background text-chat-text px-4 py-3"
+              <div key={key}>
+                {mode === "view" ? (
+                  <ChatBubble
+                    className="max-w-[80%] justify-self-end break-words"
                     variant="sent"
                   >
-                    <MarkdownContent content={part.text} id={message.id} />
-                  </ChatBubbleMessage>
-                  <div className="pointer-events-none opacity-0 group-hover:pointer-events-auto group-hover:opacity-100">
-                    <CustomButton
-                      description="Retry message"
-                      className="bg-transparent"
-                    >
-                      <RefreshCcw />
-                    </CustomButton>
-                    <CustomButton
-                      description="Edit message"
-                      className="bg-transparent"
-                    >
-                      <Edit />
-                    </CustomButton>
-                    <CopyButton value={part.text} />
-                  </div>
-                </div>
-              </ChatBubble>
+                    <div className="group flex flex-col items-end gap-1">
+                      <ChatBubbleMessage
+                        className="bg-chat-user-background text-chat-text px-4 py-3"
+                        variant="sent"
+                      >
+                        <MarkdownContent content={part.text} id={message.id} />
+                      </ChatBubbleMessage>
+                      <div className="pointer-events-none opacity-0 group-hover:pointer-events-auto group-hover:opacity-100">
+                        <CustomButton
+                          description="Retry message"
+                          className="bg-transparent"
+                        >
+                          <RefreshCcw />
+                        </CustomButton>
+                        <CustomButton
+                          description="Edit message"
+                          className="bg-transparent"
+                          onClick={() => setMode("edit")}
+                        >
+                          <Edit />
+                        </CustomButton>
+                        <CopyButton value={part.text} />
+                      </div>
+                    </div>
+                  </ChatBubble>
+                ) : (
+                  <ChatBubble
+                    className="group flex w-full max-w-[80%] flex-col items-end justify-self-end break-words"
+                    key={key}
+                    variant="sent"
+                  >
+                    <ChatBubbleMessage className="w-full px-0 py-0">
+                      <Textarea
+                        className="text-chat-text border-sidebar-border/25 focus-visible:border-sidebar-border min-h-min w-full resize-none border-4 bg-purple-50 px-3 py-4 focus-visible:ring-0 focus-visible:outline-0"
+                        value={part.text}
+                      />
+                    </ChatBubbleMessage>
+
+                    <div className="pointer-events-none opacity-0 group-hover:pointer-events-auto group-hover:opacity-100">
+                      <CustomButton
+                        description="Retry message"
+                        className="bg-transparent"
+                      >
+                        <RefreshCcw />
+                      </CustomButton>
+                      <CustomButton
+                        description="Edit message"
+                        className="bg-transparent"
+                        onClick={() => setMode("view")}
+                      >
+                        <Edit />
+                      </CustomButton>
+                      <CopyButton value={part.text} />
+                    </div>
+                  </ChatBubble>
+                )}
+              </div>
             );
           } else {
             return (
