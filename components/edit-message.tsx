@@ -3,16 +3,18 @@
 import { ChatBubble, ChatBubbleMessage } from "./ui/chat-bubble";
 import { Textarea } from "./ui/textarea";
 import CustomButton from "./custom-button";
-import { Edit, RefreshCcw } from "lucide-react";
+import { Check, Edit, RefreshCcw, X } from "lucide-react";
 import CopyButton from "./ui/copy-button";
 import { useState, useRef, useEffect } from "react";
 
 export default function EditMessage({
   initialText,
   setMode,
+  onSave,
 }: {
   initialText: string;
   setMode: (mode: "view" | "edit") => void;
+  onSave?: (newText: string) => void;
 }) {
   const [text, setText] = useState(initialText);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -30,7 +32,31 @@ export default function EditMessage({
         : initialText.length + 1;
       textareaRef.current.setSelectionRange(len, len);
     }
-  }, []);
+  }, [initialText]);
+
+  const handleSave = () => {
+    if (onSave) {
+      onSave(text.trim());
+    }
+    setMode("view");
+  };
+
+  const handleCancel = () => {
+    setText(initialText); // Reset to original text
+
+    setMode("view");
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      handleSave();
+    }
+    if (e.key === "Escape") {
+      e.preventDefault();
+      handleCancel();
+    }
+  };
 
   return (
     <ChatBubble
@@ -40,10 +66,12 @@ export default function EditMessage({
       <ChatBubbleMessage className="w-full px-0 py-0">
         <Textarea
           ref={textareaRef}
-          className="text-chat-text border-sidebar-border/25 focus-visible:border-sidebar-border min-h-min w-full resize-none border-4 bg-purple-50 px-3 py-4 break-words focus-visible:ring-0 focus-visible:outline-0"
+          className="text-chat-text border-sidebar-border/25 focus-visible:border-sidebar-border min-h-min w-full resize-none border-4 bg-purple-50 px-4 py-3 break-words focus-visible:ring-0 focus-visible:outline-0"
           value={text}
           autoFocus
           onChange={(e) => setText(e.target.value)}
+          onKeyDown={handleKeyDown}
+          placeholder="Edit your message..."
         />
       </ChatBubbleMessage>
 

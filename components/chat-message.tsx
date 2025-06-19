@@ -9,12 +9,24 @@ import CopyButton from "./ui/copy-button";
 import { useState } from "react";
 import EditMessage from "./edit-message";
 
-export default function ChatMessage({ message }: { message: Message }) {
+export default function ChatMessage({
+  message,
+  onEditMessage,
+}: {
+  message: Message;
+  onEditMessage?: (messageId: string, newContent: string) => void;
+}) {
   const isUser = message.role === "user";
   const [mode, setMode] = useState<"view" | "edit">("view");
 
   const handleSetMode = (mode: "view" | "edit") => {
     setMode(mode);
+  };
+
+  const handleSaveEdit = (newContent: string) => {
+    if (onEditMessage) {
+      onEditMessage(message.id, newContent);
+    }
   };
 
   return (
@@ -61,6 +73,7 @@ export default function ChatMessage({ message }: { message: Message }) {
                   <EditMessage
                     initialText={part.text}
                     setMode={handleSetMode}
+                    onSave={handleSaveEdit}
                   />
                 )}
               </div>

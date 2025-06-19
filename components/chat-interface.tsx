@@ -36,6 +36,7 @@ export default function ChatInterface({
     stop,
     status,
     setMessages,
+    reload,
   } = useChat({
     id,
     initialMessages,
@@ -144,6 +145,55 @@ export default function ChatInterface({
   const [containerRef, showScrollButton, scrollToBottom] =
     useScrollToBottom<HTMLDivElement>();
 
+  const handleEditMessage = async (messageId: string, newContent: string) => {
+    // Find the index of the message being edited
+    const messageIndex = messages.findIndex((m) => m.id === messageId);
+
+    if (messageIndex === -1) {
+      toast.error("Message not found");
+      return;
+    }
+
+    // Create updated messages array:
+    // 1. Keep all messages up to the edited message
+    // 2. Update the edited message with new content
+    // 3. Remove all messages after the edited message (they'll be regenerated)
+    const updatedMessages = messages.slice(0, messageIndex + 1);
+    updatedMessages[messageIndex] = {
+      ...messages[messageIndex],
+      content: newContent,
+      parts: [
+        {
+          type: "text",
+          text: newContent,
+        },
+      ],
+    };
+
+    // Update the messages state
+    setMessages(updatedMessages);
+
+    // If this was the last message, we need to trigger a new AI response
+    // Only if the edited message was a user message
+    if (
+      messageIndex === messages.length - 1 &&
+      messages[messageIndex].role === "user"
+    ) {
+      // The reload() function will automatically send the last message to get a new AI response
+      setTimeout(() => {
+        reload();
+      }, 100); // Small delay to ensure state is updated
+    } else if (
+      messages[messageIndex].role === "user" &&
+      messageIndex < messages.length - 1
+    ) {
+      // If there were assistant messages after this user message, trigger a new response
+      setTimeout(() => {
+        reload();
+      }, 100);
+    }
+  };
+
   const handleStopStream = async () => {
     stop();
 
@@ -243,7 +293,10 @@ export default function ChatInterface({
           <div className="flex flex-col px-4 pb-8">
             {messages.map((message) => (
               <div className="flex-1" key={message.id}>
-                <ChatMessage message={message} />
+                <ChatMessage
+                  message={message}
+                  onEditMessage={handleEditMessage}
+                />
               </div>
             ))}
             {status === "submitted" && (
