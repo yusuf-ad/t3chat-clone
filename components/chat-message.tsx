@@ -9,15 +9,16 @@ import CopyButton from "./ui/copy-button";
 import { useState } from "react";
 import EditMessage from "./edit-message";
 import { UseChatHelpers } from "@ai-sdk/react";
+import { toast } from "sonner";
+import { deleteTrailingMessages } from "@/server/actions/message";
+import { attempt } from "@/lib/try-catch";
 
 export default function ChatMessage({
   message,
-  onEditMessage,
   setMessages,
   reload,
 }: {
   message: Message;
-  onEditMessage?: (messageId: string, newContent: string) => void;
   setMessages: UseChatHelpers["setMessages"];
   reload: UseChatHelpers["reload"];
 }) {
@@ -26,6 +27,37 @@ export default function ChatMessage({
 
   const handleSetMode = (mode: "view" | "edit") => {
     setMode(mode);
+  };
+
+  const handleRetry = async (draftContent?: string) => {
+    // todo: add retry message for assistant
+
+    const [, errorDeleteTrailingMessage] = await attempt(async () => {
+      await deleteTrailingMessages({ id: message.id });
+    });
+
+    if (errorDeleteTrailingMessage) {
+      toast.error(errorDeleteTrailingMessage.message);
+    }
+
+    // @ts-expect-error todo: support UIMessage in setMessages
+    setMessages((messages) => {
+      const index = messages.findIndex((m) => m.id === message.id);
+
+      if (index !== -1) {
+        const updatedMessage = {
+          ...message,
+          content: "",
+          parts: [{ type: "text", text: draftContent || "" }],
+        };
+
+        return [...messages.slice(0, index), updatedMessage];
+      }
+
+      return messages;
+    });
+
+    reload();
   };
 
   return (
@@ -54,6 +86,7 @@ export default function ChatMessage({
                         <CustomButton
                           description="Retry message"
                           className="bg-transparent"
+                          onClick={() => handleRetry(part.text)}
                         >
                           <RefreshCcw />
                         </CustomButton>
@@ -113,12 +146,13 @@ export default function ChatMessage({
 
                   <div className="pointer-events-none flex items-center opacity-0 group-hover:pointer-events-auto group-hover:opacity-100">
                     <CopyButton value={part.text} />
-                    <CustomButton
+                    {/* todo: add retry message for assistant */}
+                    {/* <CustomButton
                       description="Retry message"
                       className="bg-transparent"
                     >
                       <RefreshCcw />
-                    </CustomButton>
+                    </CustomButton> */}
                     {message.annotations?.map((annotation, index) => {
                       if (
                         typeof annotation === "object" &&

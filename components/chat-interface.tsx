@@ -16,7 +16,6 @@ import { generateUUID } from "@/lib/utils";
 import { useModel } from "@/contexts/model-context";
 import { getStoredApiKeys } from "@/lib/api-keys";
 import { toast } from "sonner";
-import { deleteTrailingMessages } from "@/server/actions/message";
 
 export default function ChatInterface({
   id,
