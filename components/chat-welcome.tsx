@@ -59,7 +59,7 @@ export default function ChatWelcome({
   isPreview?: boolean;
   onQuestionClick?: (q: string) => void;
 }) {
-  const { user, isLoaded, isSignedIn } = useUser();
+  const { user, isLoaded } = useUser();
   const [selectedAction, setSelectedAction] = useState<string | null>(null);
   const userName = user?.firstName ?? "";
 
@@ -67,7 +67,7 @@ export default function ChatWelcome({
     setSelectedAction(actionName);
   };
 
-  if (!isLoaded && !isPreview && isSignedIn) {
+  if (!isLoaded && !isPreview) {
     return (
       <div className="animate-in fade-in-50 zoom-in-95 flex h-full flex-col items-center justify-center px-10 duration-300">
         <h2 className="text-interactive-secondary-text text-3xl font-bold tracking-wide">

@@ -15,9 +15,11 @@ export type Message = Omit<UIMessage, "content">;
 export async function storePausedMessages({
   id,
   responseMessage,
+  modelId,
 }: {
   id: string;
   responseMessage: Message;
+  modelId: string;
 }) {
   // use this function to save the messages that are paused
   // when the user stops the stream
@@ -32,6 +34,7 @@ export async function storePausedMessages({
           annotations: [
             {
               hasStopped: true,
+              modelId,
             },
           ],
           createdAt: responseMessage.createdAt ?? new Date(),

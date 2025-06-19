@@ -142,6 +142,7 @@ export async function POST(req: Request) {
                     annotations: [
                       {
                         hasStopped: true,
+                        modelId: languageModel.modelId,
                       },
                     ],
                     createdAt: new Date(),
@@ -185,7 +186,11 @@ export async function POST(req: Request) {
                   chatId: id,
                   role: assistantMessage.role,
                   parts: assistantMessage.parts,
-                  annotations: [],
+                  annotations: [
+                    {
+                      modelId: languageModel.modelId,
+                    },
+                  ],
                   createdAt: new Date(),
                 },
               ],

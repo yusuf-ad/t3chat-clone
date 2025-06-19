@@ -79,7 +79,7 @@ export default function ChatMessage({ message }: { message: Message }) {
                     }
                   })}
 
-                  <div className="pointer-events-none opacity-0 group-hover:pointer-events-auto group-hover:opacity-100">
+                  <div className="pointer-events-none flex items-center opacity-0 group-hover:pointer-events-auto group-hover:opacity-100">
                     <CopyButton value={part.text} />
                     <CustomButton
                       description="Retry message"
@@ -87,6 +87,22 @@ export default function ChatMessage({ message }: { message: Message }) {
                     >
                       <RefreshCcw />
                     </CustomButton>
+                    {message.annotations?.map((annotation, index) => {
+                      if (
+                        typeof annotation === "object" &&
+                        annotation !== null &&
+                        "modelId" in annotation
+                      ) {
+                        return (
+                          <p
+                            className="ml-1 text-xs"
+                            key={`annotation-${index}`}
+                          >
+                            {annotation.modelId as string}
+                          </p>
+                        );
+                      }
+                    })}
                   </div>
                 </div>
               </ChatBubble>

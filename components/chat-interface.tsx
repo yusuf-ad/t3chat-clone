@@ -55,12 +55,31 @@ export default function ChatInterface({
       };
     },
 
-    onFinish() {
+    onFinish(message) {
+      console.log("message", message);
+
       if (pathname === "/") {
         router.push(`/chat/${id}`);
         // TODO: remove this when you find a better way to sync with the server when you create a new chat
         router.refresh();
       }
+
+      // add the modelId to the last message
+      const usedModel = selectedModel.split(":")[1];
+
+      setMessages((prevMessages) => {
+        return [
+          ...prevMessages.slice(0, -1),
+          {
+            ...message,
+            annotations: [
+              {
+                modelId: usedModel,
+              },
+            ],
+          },
+        ];
+      });
     },
 
     onError(error) {
@@ -130,6 +149,8 @@ export default function ChatInterface({
 
     const lastMessage = messages[messages.length - 1];
 
+    const usedModel = selectedModel.split(":")[1];
+
     // update the messages in the client:
     setMessages((prevMessages) => {
       if (lastMessage.role === "user") {
@@ -148,6 +169,7 @@ export default function ChatInterface({
             annotations: [
               {
                 hasStopped: true,
+                modelId: usedModel,
               },
             ],
           },
@@ -169,6 +191,7 @@ export default function ChatInterface({
           annotations: [
             {
               hasStopped: true,
+              modelId: usedModel,
             },
           ],
         },
@@ -191,6 +214,7 @@ export default function ChatInterface({
             ],
             createdAt: lastMessage.createdAt,
           },
+          modelId: usedModel,
         });
       }
     });
