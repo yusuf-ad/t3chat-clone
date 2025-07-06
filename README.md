@@ -298,7 +298,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 - [ ] Resumable streams
 - [ ] End-to-end encryption
-- [ ] Rate limiting
+- [x] Rate limiting
 - [ ] DDOS protection
 - [ ] Performance monitoring
 - [ ] Error tracking and logging

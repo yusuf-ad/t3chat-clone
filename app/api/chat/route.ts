@@ -19,13 +19,39 @@ import {
 import { NextResponse } from "next/server";
 import { RequestHints, systemPrompt } from "@/lib/ai/prompts";
 import { geolocation } from "@vercel/functions";
+import { Ratelimit } from "@upstash/ratelimit";
+import { Redis } from "@upstash/redis";
 
 // Allow streaming responses up to 30 seconds
 export const maxDuration = 30;
 
-export async function POST(req: Request) {
-  // get the last message from the client:
+// Create Rate limit - 5 requests per 30 seconds per IP
+const ratelimit = new Ratelimit({
+  redis: Redis.fromEnv(),
+  limiter: Ratelimit.fixedWindow(5, "30s"),
+});
 
+export async function POST(req: Request) {
+  // Rate limiting check - get IP address and check rate limit
+  const ip =
+    req.headers.get("x-forwarded-for") ||
+    req.headers.get("x-real-ip") ||
+    "unknown";
+  const { success } = await ratelimit.limit(ip);
+
+  // Block the request if rate limited
+  if (!success) {
+    return NextResponse.json(
+      {
+        error: "Rate limit exceeded. Please try again later.",
+        status: 429,
+        remaining: 0,
+      },
+      { status: 429 },
+    );
+  }
+
+  // get the last message from the client:
   const { message, id, model, apiKeys } = await req.json();
 
   try {
