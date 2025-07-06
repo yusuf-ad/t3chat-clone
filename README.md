@@ -114,6 +114,8 @@ A modern, full-stack AI chat application built with Next.js 15, featuring suppor
    OPENAI_API_KEY=your_openai_api_key
    MISTRAL_API_KEY=your_mistral_api_key
    OPENROUTER_API_KEY=your_openrouter_api_key
+   UPSTASH_REDIS_REST_URL=your_upstash_url
+   UPSTASH_REDIS_REST_TOKEN=your_upstash_token
    ```
 
 4. **Set up the database**
